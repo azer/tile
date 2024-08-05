@@ -1,0 +1,59 @@
+examples/*.html
+
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.pnpm-debug.log
+
+# Build output
+dist/
+build/
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Test coverage
+coverage/
+
+# Temporary files
+*.log
+*.tmp
+.cache/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Parcel cache (if you're using Parcel bundler)
+.parcel-cache
+
+# Optional: Storybook build output (if you decide to use Storybook for component documentation)
+storybook-static/
+
+# Optional: Next.js build output (if you decide to use Next.js for documentation or examples)
+.next/
+
+# Ignore lock files other than the one you're using
+# Uncomment the one you're NOT using
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
+
+# Ignore any local configuration files
+*.local.*
+
+# Ignore generated documentation (if you're using a tool to generate docs)
+docs/
+
+# Ignore any OS-specific files
+Thumbs.db

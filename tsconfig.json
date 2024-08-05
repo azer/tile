@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "lib": ["dom", "es2017"],
+    "jsx": "react",
+    "declaration": true,
+    "outDir": "./dist",
+    "rootDir": "./lib",
+    "strict": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["lib/**/*"],
+  "exclude": ["node_modules", "dist", "examples"]
+}
