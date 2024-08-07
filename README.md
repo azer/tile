@@ -15,8 +15,7 @@ npm install azer/tile
 Create a box with "Hello World" message centered;
 
 ```jsx
-import { init } from '@azer/tile';
-const { Frame } = init();
+import { Frame } from '@azer/tile';
 
 const TestBox = Frame("90vw", "90vh")
   .color({ bg: "black", color: "white" })
