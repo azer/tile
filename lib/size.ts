@@ -22,17 +22,17 @@ export function register(method: MethodRegistrar) {
 function applyWidth(
   input: CSS,
   width: string | number,
-  options?: { max?: number | string },
+  options?: { max?: number | string; min?: number | string },
 ): CSS {
-  return applySizeOptions(input, { width, maxWidth: options?.max });
+  return applySizeOptions(input, { width, maxWidth: options?.max, minWidth: options?.min });
 }
 
 function applyHeight(
   input: CSS,
   height: string | number,
-  options?: { max?: number | string },
+  options?: { max?: number | string; min?: number | string },
 ): CSS {
-  return applySizeOptions(input, { height, maxHeight: options?.max });
+  return applySizeOptions(input, { height, maxHeight: options?.max, minHeight: options?.min });
 }
 
 function applySize(

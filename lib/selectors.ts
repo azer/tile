@@ -75,7 +75,7 @@ function applyActive(css: CSS, styles: Chain | CSS): CSS {
  * @returns Updated Chain with ::before styles
  *
  * @example
- * onBefore(View().content('"→"').marginRight(5))
+ * onBefore(View().content('"→"').margin({ right: 5 }))
  * // Applies: { '&::before': { content: '"→"', marginRight: 5 } }
  */
 function applyBefore(css: CSS, styles: Chain | CSS): CSS {
@@ -90,7 +90,7 @@ function applyBefore(css: CSS, styles: Chain | CSS): CSS {
  * @returns Updated Chain with ::after styles
  *
  * @example
- * onAfter(View().content('"←"').marginLeft(5))
+ * onAfter(View().content('"←"').margin({ left: 5 }))
  * // Applies: { '&::after': { content: '"←"', marginLeft: 5 } }
  */
 function applyAfter(css: CSS, styles: Chain | CSS): CSS {

@@ -19,8 +19,9 @@ import { init } from '@azer/tile';
 const { Frame } = init();
 
 const TestBox = Frame("90vw", "90vh")
-  .color({ bg: "black", color: "white" })
+  .color({ bg: "black", fg: "white" })
   .border(10, { color: "blue" })
+  .center()
   .element();
 
 export const App = () => {

@@ -28,7 +28,7 @@ export type Methods = {
 
 export function register(method: MethodRegistrar) {
   method("box", applyBoxOptions);
-  method("frame", applyBoxOptions);
+  method("frame", applyFrame);
   method("display", applyDisplay);
   method("absolute", applyAbsolute);
   method("position", applyPosition);
@@ -74,6 +74,23 @@ export interface BoxOptions {
   opacity?: number | string;
   zIndex?: number;
   content?: (value: string) => Chain;
+}
+
+/**
+ * Applies frame styling options to the CSS object, centering content by default.
+ *
+ * @param input - The current CSS object
+ * @param options - Frame styling options to be applied
+ * @returns Updated CSS object with frame styles applied
+ */
+function applyFrame(input: CSS, options: BoxOptions): CSS {
+  const defaultFrameOptions: BoxOptions = {
+    display: "flex",
+    justify: "center",
+    items: "center",
+  };
+
+  return applyBoxOptions(input, { ...defaultFrameOptions, ...options });
 }
 
 /**

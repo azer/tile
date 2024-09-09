@@ -52,8 +52,6 @@ storybook-static/
 # Ignore any local configuration files
 *.local.*
 
-# Ignore generated documentation (if you're using a tool to generate docs)
-docs/
 
 # Ignore any OS-specific files
 Thumbs.db
