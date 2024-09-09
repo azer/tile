@@ -490,3 +490,9 @@ Methods:
 * [translate(x: string | number, y?: string | number)](./docs/transform.md#translate-x-string-number-y-string-number-)
 * [skew(x: string | number, y?: string | number)](./docs/transform.md#skew-x-string-number-y-string-number-)
 * [transform(value: string)](./docs/transform.md#transform-value-string-)
+* 
+
+# Sponsor
+
+![raylabs - logo](https://github.com/user-attachments/assets/506bbf72-e1e3-4c11-8cfc-4d32695a0a48)
+
