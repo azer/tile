@@ -53,13 +53,27 @@ View()
 
 ### bg(options: BGOptions)
 
-Set background styles.
+Set background styling.
+
+To set solid color:
 
 ```typescript
 View()
   .bg('blue')
   .element();
+```
 
+To set a background image:
+
+```ts
+View()
+  .bg({ url: 'https://foo.com/bar.png' }) // use `src` property for non-url values
+  .element()
+```
+
+More complex example:
+
+```ts
 View()
   .bg({
     color: 'blue',
@@ -74,7 +88,7 @@ View()
 #### BGOptions
 
 - `color`: Background color
-- `url`: Background image URL
+- `url`: Background image URL, shortcut for `url(...)`
 - `src`: Background image source
 - `base64`: Base64 encoded background image
 - `size`: 'cover' | 'contain' | 'auto'
