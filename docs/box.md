@@ -2,6 +2,26 @@
 
 Methods for creating and manipulating layout containers. Use these functions to set dimensions, position elements, and control other box model properties in your React components.
 
+Here's an intuitive example for the Box module:
+
+```tsx
+import { View } from "tile-css"
+
+const ResponsiveCard = View()
+  .box({
+    display: 'flex',
+    flexDir: 'column',
+    justify: 'center',
+    items: 'center',
+  
+  })
+  .element();
+
+export const Card = ({ children }) => (
+  <ResponsiveCard>{children}</ResponsiveCard>
+);
+```
+
 - [Factory Functions](#factory-functions)
   - [Frame](#framewidth-height-align)
   - [VStack](#vstackelementtagoroptions-options)

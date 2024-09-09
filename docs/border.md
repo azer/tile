@@ -2,11 +2,35 @@
 
 Methods for applying and manipulating border styles in React components.
 
+```typescript
+import { View } from "tile-css"
+
+const FancyButton = View('button')
+  .size(200, 50)
+  .color({ fg: 'blue', bg: 'white' })
+  .border(2, { color: 'blue' })
+  .round({ x: 25, y: 10 })
+  .onHover(
+    style()
+      .color({ bg: 'blue', fg: 'white' })
+      .border(2, { color: 'white' })
+  )
+  .element();
+
+export const CustomButton = ({ children }) => (
+  <FancyButton>{children}</FancyButton>
+);
+```
+
+## Shortcut Methods
+
 - [border](#border)
 - [stroke](#stroke)
 - [round](#round)
 
-## border
+## Shortcut Methods
+
+### border
 
 Apply border styles to elements.
 
@@ -42,12 +66,11 @@ View()
   .element();
 ```
 
-
-## stroke
+### stroke
 
 Alias for `border`. Uses the same parameters and options.
 
-## round
+### round
 
 Apply border-radius to elements.
 

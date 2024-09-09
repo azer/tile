@@ -2,13 +2,13 @@
 
 The Accessibility module in Tile provides methods for enhancing the accessibility of your React components. Currently, it focuses on text selection control.
 
-
 ```ts
+import { View } from "tile-css"
+
 const AccessibleQuote = View('blockquote')
   .selection({
     bg: 'rgba(0, 123, 255, 0.2)',
-    fg: 'navy',
-    userSelect: 'text'
+    fg: 'navy'
   })
   .element();
 
@@ -29,17 +29,22 @@ export const ImportantMessage = () => (
 
 Controls text selection behavior and appearance.
 
+To disable selection:
+
+```tsx
+const NonSelectableText = View()
+  .selection(false)
+  .element();
+```
+
+To customize:
+
 ```typescript
 const SelectableText = View()
   .selection({
     bg: 'blue',
-    fg: 'white',
-    userSelect: 'text'
+    fg: 'white'
   })
-  .element();
-
-const NonSelectableText = View()
-  .selection(false)
   .element();
 ```
 

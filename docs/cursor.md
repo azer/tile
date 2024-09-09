@@ -2,6 +2,18 @@
 
 Methods for setting cursor styles in React components.
 
+```tsx
+import { View, Cursor } from "tile-css"
+
+const InteractiveElement = View()
+  .size(100)
+  .bg('lightblue')
+  .cursor(Cursor.Pointer)
+  .element();
+
+export const CursorDemo = () => <InteractiveElement />;
+```
+
 - [Shortcut Methods](#shortcut-methods)
   - [cursor](#cursorvalue-cursor--cursoroptions)
 

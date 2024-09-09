@@ -2,48 +2,24 @@
 
 Methods for setting dimensions of React components.
 
+```tsx
+import { View } from "tile-css"
+
+const ResponsiveSquare = View()
+  .size(600, 300) // width: 600px, height: 300px
+  .bg('lightblue')
+  .element();
+
+export const SquareDemo = () => <ResponsiveSquare />;
+```
+
 - [Shortcut Methods](#shortcut-methods)
-  - [size](#sizewidthoroptions-heightoroptions)
   - [width](#widthwidth-options)
   - [height](#heightheight-options)
+- [The `size` method](#sizewidthoroptions-heightoroptions)
+
 
 ## Shortcut Methods
-
-### size(widthOrOptions, heightOrOptions?)
-
-Sets both width and height of an element.
-
-To create a 100x100 pixel square element;
-
-```typescript
-const SquareBox = View()
-  .size(100)
-  .element();
-```
-
-To create a rectangle element 200 px wide and 100 px tall.
-
-```typescript
-const RectangleBox = View()
-  .size(200, 100)
-  .element();
-```
-
-Pass more detailed options:
-
-```typescript
-const ComplexSizedElement = View()
-  .size({
-    width: '100%',
-    maxWidth: 1200,
-    height: 'auto',
-    minHeight: 300,
-    aspect: 16/9
-  })
-  .element();
-```
-
-This creates an element with full width (max 1200px), auto height (min 300px), and a 16:9 aspect ratio.
 
 ### width(width, options?)
 
@@ -100,3 +76,41 @@ const MaxWidthBox = View()
   .height('100%', { min: 600 }) //  height: 100%, minHeight: 600px
   .element();
 ```
+
+## Core Layout Methods
+
+### size(widthOrOptions, heightOrOptions?)
+
+Sets both width and height of an element.
+
+To create a 100x100 pixel square element;
+
+```typescript
+const SquareBox = View()
+  .size(100)
+  .element();
+```
+
+To create a rectangle element 200 px wide and 100 px tall.
+
+```typescript
+const RectangleBox = View()
+  .size(200, 100)
+  .element();
+```
+
+Pass more detailed options:
+
+```typescript
+const ComplexSizedElement = View()
+  .size({
+    width: '100%',
+    maxWidth: 1200,
+    height: 'auto',
+    minHeight: 300,
+    aspect: 16/9
+  })
+  .element();
+```
+
+This creates an element with full width (max 1200px), auto height (min 300px), and a 16:9 aspect ratio.

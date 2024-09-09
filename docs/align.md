@@ -2,6 +2,22 @@
 
 Methods for controlling the alignment of content within flex and grid containers.
 
+```tsx
+import { View } from "tile-css"
+
+const Container = View('100%', '100vh')
+  .align({ x: 'center', y: 'end' }) // align contents to bottom center
+  .element();
+
+export const AppLayout = () => (
+  <ResponsiveLayout>
+    <Header />
+    <MainContent />
+    <Footer />
+  </ResponsiveLayout>
+);
+```
+
 - [Factory Functions](#factory-functions)
   - [Frame](#framewidth-height-align)
   - [VStack](#vstackelementtagoroptions-options)
@@ -43,6 +59,16 @@ const EndAlignedHStack = HStack({ align: 'end' }).element();
 ```
 
 ## Shortcut Methods
+
+### center(options?: FlexOptions)
+
+Sets the layout to be a flexbox and centers the contents automatically.
+
+```typescript
+const CenteredContent = View()
+  .center()
+  .element();
+```
 
 ### align(options: AlignmentOptions)
 

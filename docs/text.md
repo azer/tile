@@ -2,7 +2,6 @@
 
 Methods for applying text styles to React components.
 
-
 ```ts
 const Info = View('p')
   .sans(16, {

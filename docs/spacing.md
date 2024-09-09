@@ -2,6 +2,20 @@
 
 Methods for applying spacing styles to React components.
 
+```tsx
+import { View } from "tile-css"
+
+const SpacedCard = View()
+  .size(200)
+  .padding({ x: 20, y: 15 }) // left, right: 20px -- top, bottom: 15px
+  .margin(10, { right: 0 }) // 10px around, except right
+  .element();
+
+export const CardWithSpacing = ({ children }) => (
+  <SpacedCard>{children}</SpacedCard>
+);
+```
+
 - [Shortcut Methods](#shortcut-methods)
   - [margin](#marginoptions-number--string--boxsides-override-boxsides)
   - [padding](#paddingoptions-number--string--boxsides-override-boxsides)

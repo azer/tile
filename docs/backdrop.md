@@ -2,6 +2,26 @@
 
 Apply backdrop filter effects to elements.
 
+```tsx
+import { View } from "tile-css"
+
+const FrostedGlassCard = View(300, 200)
+  .backdrop({
+    blur: 10,
+    saturate: "180%",
+    brightness: "105%"
+  })
+  .bg('rgba(255, 255, 255, 0.2)')
+  .border(1, { color: 'rgba(255, 255, 255, 0.3)' })
+  .round(15)
+  .padding(20)
+  .element();
+
+export const GlassCard = ({ children }) => (
+  <FrostedGlassCard>{children}</FrostedGlassCard>
+);
+```
+
 - [Shortcut Methods](#shortcut-methods)
   - [backdrop](#backdropoptions-backdropoptions)
 

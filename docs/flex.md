@@ -78,11 +78,11 @@ const VerticalStack = View()
 
 ### center(options?: FlexOptions)
 
-Creates a centered flex layout.
+Sets the layout to be a flexbox and centers the contents automatically.
 
 ```typescript
 const CenteredContent = View()
-  .center({ wrap: "wrap" })
+  .center()
   .element();
 ```
 

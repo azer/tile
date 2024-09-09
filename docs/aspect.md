@@ -2,6 +2,17 @@
 
 Set the aspect ratio of an element.
 
+```tsx
+import { View } from "tile-css"
+
+const SquareElement = View()
+  .aspect(1)
+  .bg("red")
+  .element();
+
+export const SquareDemo = () => (<SquareElement />)
+```
+
 - [Shortcut Methods](#shortcut-methods)
   - [aspect](#aspectratio-number)
 

@@ -2,6 +2,22 @@
 
 Methods for applying color-related styles to React components.
 
+```tsx
+import { View } from "tile-css"
+
+const KittenButton = View('button')
+  .fg("#ff0")
+  .bg({
+    url: 'https://placekitten.com/100x100.jpg',
+    size: 'cover'
+  })
+  .element();
+
+export const FancyButton = ({ children }) => (
+  <KittenButton>{children}</KittenButton>
+);
+```
+
 - [Shortcut Methods](#shortcut-methods)
   - [color](#coloroptions-coloroptions)
   - [fg](#fgcolor-string)
