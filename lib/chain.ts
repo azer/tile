@@ -14,7 +14,11 @@ import * as transition from "./transition";
 import * as scroll from "./scroll";
 import * as flex from "./flex";
 import * as selectors from "./selectors";
-import * as responsive from './responsive'
+import * as grid from "./grid";
+import * as responsive from "./responsive";
+import * as transform from "./transform";
+import * as accessibility from "./accessibility";
+import * as backdrop from "./backdrop";
 
 export type Tag = Parameters<typeof stitchesStyled>[0];
 export type Tokens = Parameters<typeof createStitches>[0];
@@ -22,12 +26,13 @@ export type Node = ReturnType<typeof stitchesStyled>;
 export type StitchesInstance = ReturnType<typeof createStitches>;
 export type VariantCSS = Record<
   string,
-  CSS | { chain: Chain; value: string | number | boolean }
+  CSS | { chain: Chain; value: string | number | boolean }[]
 >;
 
 export type MethodRegistrar = (name: string, m: ChainMethod) => void;
 
 export type Chain = {
+  extend: () => Chain;
   compile: () => CSS;
   select: (selector: string, subchain: CSS | Chain) => Chain;
   variant: (
@@ -51,7 +56,11 @@ export type Chain = {
   scroll.Methods &
   flex.Methods &
   selectors.Methods &
-responsive.Methods;
+  responsive.Methods &
+  grid.Methods &
+  transform.Methods &
+  accessibility.Methods &
+  backdrop.Methods;
 
 export type ChainMethod = (input: CSS, ...args: unknown[]) => CSS;
 
@@ -72,34 +81,55 @@ const modules = [
   flex,
   selectors,
   responsive,
+  grid,
+  transform,
+  accessibility,
+  backdrop,
 ];
 
 export function createChain(
   stitches: StitchesInstance,
-  elementTag?: string,
+  elementTag?: Tag,
+  startingValues?: {
+    tree: CSS;
+    variants: VariantCSS;
+    children: Record<string, Chain>;
+  },
 ): Chain {
-  let tree: CSS = {};
-  const variants: VariantCSS = {};
-  const children: Record<string, Chain> = {};
+  let tree: CSS = { ...startingValues?.tree };
+  const variants: VariantCSS = { ...startingValues?.variants };
+  const children: Record<string, Chain> = { ...startingValues?.children };
 
   const chain: Chain = {
+    extend: () => {
+      return createChain(stitches, elementTag, { tree, variants, children });
+    },
     compile,
     select: (selector: string, subchain: Chain) => {
       children[selector] = subchain;
       return chain;
     },
-    element: () => {
-      return stitches.styled(elementTag || "div", chain.compile());
+    element: (rawCSS?: CSS) => {
+      return stitches.styled(elementTag || ("div" as Tag), {
+        ...chain.compile(),
+        ...rawCSS,
+      });
     },
     variant: (
       name: string,
       value: string | number | boolean,
       subchain: Chain,
     ) => {
-      variants[name] = {
-        value,
-        chain: subchain,
-      };
+      if (variants[name]) {
+        variants[name].push({ chain: subchain, value });
+      } else {
+        variants[name] = [
+          {
+            value,
+            chain: subchain,
+          }
+        ];
+      }
 
       return chain;
     },
@@ -132,13 +162,14 @@ export function createChain(
     output.variants = {};
 
     for (const name in variants) {
-      // @ts-ignore
-      output.variants[name] = {
-        [variants[name].value]:
-          variants[name].chain.compile === undefined
-            ? variants[name].chain
-            : variants[name].chain.compile(),
-      };
+      output.variants[name] = {}
+
+      for (const variant of variants[name]) {
+				output.variants[name][variant.value] =
+					variant.chain.compile === undefined
+						? variant.chain
+						: variant.chain.compile();
+      }
     }
 
     for (const selector in children) {

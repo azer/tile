@@ -1,6 +1,6 @@
 import { CSS } from "@stitches/react";
 import { Chain, MethodRegistrar } from "./chain";
-import { applyAlignOptions, StackAlignment } from "./align";
+import { applyFlexAlignOptions, StackAlignment } from "./align";
 
 export type Methods = {
   flex: (options: FlexOptions) => Chain;
@@ -64,7 +64,7 @@ export interface FlexOptions {
  * applyFlex({}, { direction: "row", justify: "flex-end", items: "center" })
  * // Output: { display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }
  */
-function applyFlex(input: CSS, options: FlexOptions): CSS {
+function applyFlex(input: CSS, options: FlexOptions = {}): CSS {
   let output = { ...input, display: "flex" };
 
   if (options.direction) output.flexDirection = options.direction;
@@ -76,7 +76,7 @@ function applyFlex(input: CSS, options: FlexOptions): CSS {
   if (options.basis !== undefined) output.flexBasis = options.basis;
 
   if (options.align) {
-    output = applyAlignOptions(output, options.align);
+    output = applyFlexAlignOptions(output, options.align);
   }
 
   return output

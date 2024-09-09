@@ -1,6 +1,6 @@
 import { CSS } from "@stitches/react";
 import { Chain, MethodRegistrar } from "./chain";
-import { applyAlignOptions, StackAlignment } from "./align";
+import { applyAlign, StackAlignment } from "./align";
 
 export type Methods = {
   box: (options: BoxOptions) => Chain;
@@ -111,7 +111,7 @@ export function applyBoxOptions(input: CSS, options: BoxOptions) {
   }
 
   if (options.align) {
-    css = applyAlignOptions(css, options.align);
+    css = applyAlign(css, options.align);
   }
 
   if (options.opacity) {
@@ -207,16 +207,11 @@ function applyAbsolute(
  */
 function applyPosition(
   input: CSS,
-  x: string | number,
+  xOrOptions: string | number,
   y?: string | number,
   options?: BoxOptions,
 ): CSS {
-    return applyBoxOptions(input, {
-      position: "absolute",
-      x: xOrOptions,
-      y,
-      ...options,
-    });
+  return applyAbsolute(input, xOrOptions, y, options);
 }
 
 /**

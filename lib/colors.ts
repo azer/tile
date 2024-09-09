@@ -1,5 +1,6 @@
 import { CSS } from "@stitches/react";
 import { MethodRegistrar, Chain } from "./chain";
+import { SelectionOptions, applySelection } from "./accessibility";
 
 export type Methods = {
   color: (options: ColorOptions) => Chain;
@@ -7,7 +8,6 @@ export type Methods = {
   bg: (options: BGOptions) => Chain;
   placeholder: (fg: string) => Chain;
   fill: (options: BGOptions) => Chain;
-  selection: (bg: string, fg: string) => Chain;
 };
 
 export function register(method: MethodRegistrar) {
@@ -16,7 +16,6 @@ export function register(method: MethodRegistrar) {
   method("bg", applyBg);
   method("fill", applyBg);
   method("placeholder", applyPlaceholder);
-  method("selection", applySelection);
 }
 
 export interface ColorOptions {
@@ -35,6 +34,7 @@ export type BGOptions =
       color: string;
       url?: string;
       src?: string;
+      base64?: string;
       size?: "cover" | "contain" | "auto";
       position?: string | [string, string];
       repeat?: "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
@@ -57,12 +57,8 @@ function applyPlaceholder(input: CSS, fg: string): CSS {
   return applyColorOptions(input, { placeholder: fg });
 }
 
-function applySelection(input: CSS, bg: string, fg: string): CSS {
-  return applyColorOptions(input, { selectionBg: bg, selectionFg: fg });
-}
-
 function applyColorOptions(css: CSS, options: ColorOptions): CSS {
-  const output = { ...css };
+  let output = { ...css };
   const map = {
     fg: "color",
     bg: "backgroundColor",
@@ -85,11 +81,7 @@ function applyColorOptions(css: CSS, options: ColorOptions): CSS {
   }
 
   if (options.selectionBg || options.selectionFg) {
-    output["::selection"] = {
-      ...(output["::selection"] as object),
-      backgroundColor: options.selectionBg,
-      color: options.selectionFg,
-    };
+    output = applySelection(output, { fg: options.selectionFg, bg: options.selectionBg });
   }
 
   if (typeof options.bg === "object") {
@@ -119,6 +111,10 @@ function applyBackgroundOptions(input: CSS, options: BGOptions): CSS {
     output.backgroundImage = options.src;
   }
 
+  if (options.base64) {
+    output.backgroundImage = `url(data:image/png;base64,${options.base64})`;
+  }
+
   if (options.size) {
     output.backgroundSize = options.size;
   }
@@ -127,6 +123,7 @@ function applyBackgroundOptions(input: CSS, options: BGOptions): CSS {
       ? options.position.join(" ")
       : options.position;
   }
+
   if (options.repeat) {
     output.backgroundRepeat = options.repeat;
   }

@@ -1,11 +1,13 @@
+import { CSS } from "@stitches/react";
+import { MethodRegistrar, Chain } from "./chain";
 
 export type Methods = {
   geometry: (options: CSS, styles: Chain | CSS) => Chain;
   media: (breakpoint: string, styles: Chain | CSS) => Chain;
-  mobile: ResponsiveFunction;
-  desktop: ResponsiveFunction;
-  portrait: ResponsiveFunction;
-  landscape: ResponsiveFunction;
+  mobile: (styles: Chain | CSS) => Chain;
+  desktop: (styles: Chain | CSS) => Chain;
+  portrait: (styles: Chain | CSS) => Chain;
+  landscape: (styles: Chain | CSS) => Chain;
 };
 
 export function register(method: MethodRegistrar) {

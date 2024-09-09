@@ -10,14 +10,10 @@ const Hello = Frame("90vw", "90vh")
   .text(48)
   .element();
 
-export const App = () => {
+export const App = ({ message }: { message: string }) => {
   return (
     <Hello>
-     9991
+      {message || "Hello World"}
     </Hello>
   );
 };
-
-
-//const root = createRoot(document.getElementById('root'));
-//root.render(<App />);

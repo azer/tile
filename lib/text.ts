@@ -34,6 +34,7 @@ export interface TextOptions {
   cursor?: Cursor
   decoration?: 'none' | 'underline' | 'line-through' | 'overline'
   ellipsis?: boolean
+    shadow?: TextShadow | TextShadow[]
 }
 
 /**
@@ -157,6 +158,12 @@ function applyTextOptions(css: CSS, options: TextOptions): CSS {
     output = applyEllipsis(output)
   }
 
+
+  if (options.shadow) {
+    output = applyTextShadow(output, options.shadow)
+  }
+
+
   return output
 }
 
@@ -185,5 +192,48 @@ function applyEllipsis(css: CSS): CSS {
     overflowY: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis'
+  }
+}
+
+export interface TextShadow {
+  offsetX: string | number
+  offsetY: string | number
+  blurRadius?: string | number
+  color?: string
+}
+
+/**
+ * Applies text shadow styles to the CSS object.
+ *
+ * @param css - The current CSS object
+ * @param shadow - TextShadow object or array of TextShadow objects
+ * @returns Updated CSS object with text shadow styles applied
+ *
+ * @example
+ * // Input:
+ * applyTextShadow({}, { offsetX: 1, offsetY: 1, blurRadius: 2, color: 'black' })
+ * // Output:
+ * { textShadow: '1px 1px 2px black' }
+ *
+ * @example
+ * // Input:
+ * applyTextShadow({}, [
+ *   { offsetX: 1, offsetY: 1, color: 'black' },
+ *   { offsetX: 2, offsetY: 2, blurRadius: 3, color: 'rgba(0,0,0,0.5)' }
+ * ])
+
+ * // Output:
+ * { textShadow: '1px 1px black, 2px 2px 3px rgba(0,0,0,0.5)' }
+ */
+function applyTextShadow(css: CSS, shadow: TextShadow | TextShadow[]): CSS {
+  const shadows = Array.isArray(shadow) ? shadow : [shadow]
+  const textShadows = shadows.map(s => {
+    const { offsetX, offsetY, blurRadius, color } = s
+    return `${offsetX} ${offsetY}${blurRadius ? ` ${blurRadius}` : ''}${color ? ` ${color}` : ''}`
+  })
+
+  return {
+    ...css,
+    textShadow: textShadows.join(', ')
   }
 }

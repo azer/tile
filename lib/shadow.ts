@@ -1,29 +1,90 @@
-import { CSS } from '@stitches/react'
-import { MethodRegistrar, Chain } from './chain'
+import { CSS } from '@stitches/react';
+import { MethodRegistrar, Chain } from './chain';
+import { toPx } from './utils';
 
 export type Methods = {
-  shadow: (strength?: number) => Chain
+  shadow: (options: ShadowOptions | number) => Chain;
+};
+
+export interface ShadowOptions {
+  x?: number | string;
+  y?: number | string;
+  blur?: number | string;
+  spread?: number | string;
+  color?: string;
+  inset?: boolean;
 }
 
 export function register(method: MethodRegistrar) {
-  method("shadow", applyShadow)
+  method("shadow", applyShadow);
 }
 
-const shadows = [
-  '0 0 #0000', // shadow-none
-  '0 1px 2px 0 rgb(0 0 0 / 0.05)', // shadow-sm
-  '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)', // shadow
-  '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)', // shadow-md
-  '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)', // shadow-lg
-  '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)', // shadow-xl
-  '0 25px 50px -12px rgb(0 0 0 / 0.25)', // shadow-2xl
-  'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)', // shadow-inner
-]
+const defaultShadow: ShadowOptions = {
+  x: 0,
+  y: 0,
+  blur: 4,
+  spread: 0,
+  color: 'rgba(0, 0, 0, 0.1)',
+  inset: false,
+};
 
-function applyShadow(css: CSS, strength?: number): CSS {
-  const index = Math.max(0, Math.min(shadows.length - 1, Math.floor((strength || 0.5) * 4)))
+// Predefined shadow strengths
+const shadowStrengths: ShadowOptions[] = [
+  { x: '0', y: '0', blur: '0', spread: '0', color: 'transparent' }, // none
+  { y: '1px', blur: '2px', color: 'rgba(0, 0, 0, 0.05)' }, // sm
+  { y: '4px', blur: '6px', spread: '-1px', color: 'rgba(0, 0, 0, 0.1)' }, // md
+  { y: '10px', blur: '15px', spread: '-3px', color: 'rgba(0, 0, 0, 0.1)' }, // lg
+  { y: '20px', blur: '25px', spread: '-5px', color: 'rgba(0, 0, 0, 0.1)' }, // xl
+  { y: '25px', blur: '50px', spread: '-12px', color: 'rgba(0, 0, 0, 0.25)' }, // 2xl
+  { inset: true, y: '2px', blur: '4px', color: 'rgba(0, 0, 0, 0.05)' }, // inner
+];
+
+/**
+ * Applies shadow styles to the CSS object.
+ *
+ * @param css - The current CSS object
+ * @param options - Shadow options or a number for predefined strength
+ * @returns Updated CSS object with shadow styles applied
+ *
+ * @example
+ * // Apply default shadow
+ * applyShadow({}, 2)
+ *
+ * @example
+ * // Apply custom shadow
+ * applyShadow({}, {
+ *   x: '5px',
+ *   y: '5px',
+ *   blur: '10px',
+ *   spread: '2px',
+ *   color: 'rgba(0, 0, 0, 0.2)',
+ *   inset: true
+ * })
+ */
+function applyShadow(css: CSS, options: ShadowOptions | number): CSS {
+  if (typeof options === 'number') {
+    const index = Math.max(0, Math.min(shadowStrengths.length - 1, Math.floor(options)));
+    return applyShadowOptions(css, shadowStrengths[index]);
+  }
+  return applyShadowOptions(css, options);
+}
+
+/**
+ * Applies shadow options to the CSS object.
+ *
+ * @param css - The current CSS object
+ * @param options - Shadow options
+ * @returns Updated CSS object with shadow styles applied
+ */
+function applyShadowOptions(css: CSS, options: ShadowOptions): CSS {
+  const {
+    x, y, blur, spread, color, inset
+  } = { ...defaultShadow, ...options };
+
+  const shadowValue = `${inset ? 'inset ' : ''}${toPx(x)} ${toPx(y)} ${toPx(blur)} ${toPx(spread)} ${color}`;
+
   return {
     ...css,
-    boxShadow: shadows[index]
-  }
+    boxShadow: shadowValue,
+  };
 }

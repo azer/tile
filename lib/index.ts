@@ -3,11 +3,21 @@ import { Tokens, Chain, createChain } from "./chain";
 import { BoxOptions } from "./box";
 import { breakpoints } from "./breakpoints";
 import { tokens } from "./tokens";
+import { GridOptions } from "./grid";
+
+export { Cursor } from "./cursor";
 
 interface InitOptions {
   tokens: Tokens;
   breakpoints: Record<string, string>;
 }
+
+// Create a default instance of init
+const defaultInstance = init();
+
+// Export the components from the default instance
+export const { View, style, Frame, ScrollView, VStack, HStack, Grid } = defaultInstance;
+
 
 /**
  * Initializes the styling library with custom tokens and breakpoints.
@@ -42,7 +52,7 @@ export function init(options?: InitOptions) {
      * @example
      * const MyComponent = View().bg('red').text('white').element();
      */
-    View: (elementTag?: string): Chain => {
+    View: (elementTag?: Tag): Chain => {
       return chain(elementTag || "div");
     },
 
@@ -54,8 +64,8 @@ export function init(options?: InitOptions) {
      * @example
      * const MyStyle = style().padding(20).margin(10);
      */
-    style: (): Chain => {
-      return chain("div");
+    style: (tagOrElement?: Tag): Chain => {
+      return chain(tagOrElement);
     },
 
     /**
@@ -97,7 +107,9 @@ export function init(options?: InitOptions) {
         height = heightOrBoxOptions;
       }
 
-      const c = chain("div").vstack().box({ ...boxOptions, width, height });
+      const c = chain("div")
+        .vstack()
+        .box({ ...boxOptions, width, height });
       if (!align) {
         return c.align("center");
       }
@@ -106,31 +118,6 @@ export function init(options?: InitOptions) {
         x: align?.x || "center",
         y: align?.y || "center",
       });
-    },
-
-    /**
-     * Creates a horizontally stacked layout.
-     *
-     * @param elementTagOrOptions - HTML tag or BoxOptions
-     * @param options - Additional BoxOptions
-     * @returns A new Chain instance with horizontal stack styles
-     *
-     * @example
-     * const MyHStack = HStack().space({ gap: 10 }).padding(20).element();
-     */
-    HStack: (
-      elementTagOrOptions?: string | BoxOptions,
-      options?: BoxOptions,
-    ): Chain => {
-if (typeof elementTagOrOptions === "object") {
-        return chain("div").hstack(elementTagOrOptions);
-      }
-
-      if (typeof options === "object") {
-	return chain(elementTagOrOptions || "div").hstack().box(options);
-      }
-
-      return chain(elementTagOrOptions || "div").hstack()
     },
 
     /**
@@ -150,26 +137,101 @@ if (typeof elementTagOrOptions === "object") {
     /**
      * Creates a vertically stacked layout.
      *
-     * @param elementTagOrOptions - HTML tag or BoxOptions
+     * @param widthOrOptions - Width or BoxOptions for the stack
+     * @param heightOrOptions - Height or BoxOptions for the stack
      * @param options - Additional BoxOptions
      * @returns A new Chain instance with vertical stack styles
      *
      * @example
-     * const MyVStack = VStack().space({ gap: 20 }).align('center').element();
+     * const SimpleVStack = VStack(100, 100).element();
+     * const AspectVStack = VStack(200, { aspect: 1 }).element();
+     * const ComplexVStack = VStack(100, 200, { maxHeight: "100%" }).element();
      */
     VStack: (
-      elementTagOrOptions?: string | BoxOptions,
+      widthOrOptions?: number | string | BoxOptions,
+      heightOrOptions?: number | string | BoxOptions,
       options?: BoxOptions,
     ): Chain => {
-      if (typeof elementTagOrOptions === "object") {
-        return chain("div").vstack(elementTagOrOptions);
+      let width: number | string | undefined;
+      let height: number | string | undefined;
+      let boxOptions: BoxOptions = {};
+
+      if (typeof widthOrOptions === "object") {
+        boxOptions = widthOrOptions;
+      } else {
+        width = widthOrOptions;
       }
 
-      if (typeof options === "object") {
-	return chain(elementTagOrOptions || "div").vstack().box(options);
+      if (typeof heightOrOptions === "object") {
+        boxOptions = { ...boxOptions, ...heightOrOptions };
+      } else {
+        height = heightOrOptions;
       }
 
-      return chain(elementTagOrOptions || "div").vstack()
+      if (options) {
+        boxOptions = { ...boxOptions, ...options };
+      }
+
+      return chain("div")
+        .vstack()
+        .box({ ...boxOptions, width, height });
+    },
+
+    /**
+     * Creates a horizontally stacked layout.
+     *
+     * @param widthOrOptions - Width or BoxOptions for the stack
+     * @param heightOrOptions - Height or BoxOptions for the stack
+     * @param options - Additional BoxOptions
+     * @returns A new Chain instance with horizontal stack styles
+     *
+     * @example
+     * const SimpleHStack = HStack(100, 100).element();
+     * const MaxWidthHStack = HStack(100, { maxWidth: "500px" }).element();
+     * const ComplexHStack = HStack(200, 200, { maxHeight: "100%" }).element();
+     */
+    HStack: (
+      widthOrOptions?: number | string | BoxOptions,
+      heightOrOptions?: number | string | BoxOptions,
+      options?: BoxOptions,
+    ): Chain => {
+      let width: number | string | undefined;
+      let height: number | string | undefined;
+      let boxOptions: BoxOptions = {};
+
+      if (typeof widthOrOptions === "object") {
+        boxOptions = widthOrOptions;
+      } else {
+        width = widthOrOptions;
+      }
+
+      if (typeof heightOrOptions === "object") {
+        boxOptions = { ...boxOptions, ...heightOrOptions };
+      } else {
+        height = heightOrOptions;
+      }
+
+      if (options) {
+        boxOptions = { ...boxOptions, ...options };
+      }
+
+      return chain("div")
+        .hstack()
+        .box({ ...boxOptions, width, height });
+    },
+
+    /**
+     * Creates a grid layout.
+     *
+     * @param options - Grid options
+     * @returns A new Chain instance with grid styles
+     *
+     * @example
+     * const SimpleGrid = Grid({ columns: 3, gap: 10 }).element();
+     * const ComplexGrid = Grid({ columns: '1fr 2fr 1fr', rows: '100px auto' }).element();
+     */
+    Grid: (options: GridOptions): Chain => {
+      return chain("div").grid(options);
     },
   };
 }

@@ -16,7 +16,26 @@ export type Methods = {
 }
 
 export function register(method: MethodRegistrar) {
-  method("align", applyAlignOptions)
+  method("align", applyAlign)
+}
+
+export function applyAlign(
+  css: CSS,
+  alignment:
+    | StackAlignment
+    | [StackAlignment, StackAlignment]
+    | {
+        horizontal?: StackAlignment
+        vertical?: StackAlignment
+        x?: StackAlignment
+        y?: StackAlignment
+      }
+): CSS {
+  if (css.display === 'grid') {
+    return applyGridAlignOptions(css, alignment)
+  }
+
+  return applyFlexAlignOptions(css, alignment)
 }
 
 export type StackAlignment =
@@ -30,7 +49,7 @@ export type StackAlignment =
   | 'leading'
   | 'trailing'
 
-export function applyAlignOptions(
+export function applyFlexAlignOptions(
   css: CSS,
   alignment:
     | StackAlignment
@@ -40,7 +59,7 @@ export function applyAlignOptions(
         vertical?: StackAlignment
         x?: StackAlignment
         y?: StackAlignment
-      }
+    }
 ): CSS {
   const result = { ...css }
   const alignmentMap: Record<StackAlignment, string> = {
@@ -79,6 +98,53 @@ export function applyAlignOptions(
     result.alignItems = alignmentMap[ver]
   } else if (!isRow && hor) {
     result.alignItems = alignmentMap[hor]
+  }
+
+  return result
+}
+
+export function applyGridAlignOptions(
+  css: CSS,
+  alignment:
+    | StackAlignment
+    | [StackAlignment, StackAlignment]
+    | {
+        horizontal?: StackAlignment
+        vertical?: StackAlignment
+        x?: StackAlignment
+        y?: StackAlignment
+      }
+): CSS {
+  const result = { ...css }
+  const alignmentMap: Record<StackAlignment, string> = {
+    top: 'start',
+    center: 'center',
+    bottom: 'end',
+    left: 'start',
+    right: 'end',
+    start: 'start',
+    end: 'end',
+    leading: 'start',
+    trailing: 'end',
+  }
+  let hor: StackAlignment | undefined
+  let ver: StackAlignment | undefined
+
+  if (typeof alignment === 'string') {
+    hor = ver = alignment
+  } else if (Array.isArray(alignment)) {
+    ;[hor, ver] = alignment
+  } else {
+    hor = alignment.horizontal || alignment.x
+    ver = alignment.vertical || alignment.y
+  }
+
+  if (hor) {
+    result.justifyContent = alignmentMap[hor]
+  }
+
+  if (ver) {
+    result.alignContent = alignmentMap[ver]
   }
 
   return result

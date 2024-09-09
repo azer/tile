@@ -9,6 +9,8 @@ export type Methods = {
   onActive: SelectorFunction;
   before: SelectorFunction;
   after: SelectorFunction;
+  select: (styles: Chain | CSS, selector: string) => CSS;
+  attr: (styles: Chain | CSS, attributeName: string, options?: AttrSelectorOptions) => CSS;
 };
 
 export function register(method: MethodRegistrar) {
@@ -17,7 +19,7 @@ export function register(method: MethodRegistrar) {
   method("onActive", applyActive);
   method("before", applyBefore);
   method("after", applyAfter);
-  method("select", applySelector);
+  method("attr", applyAttr);
 }
 
 /**
@@ -76,7 +78,7 @@ function applyActive(css: CSS, styles: Chain | CSS): CSS {
  * onBefore(View().content('"→"').marginRight(5))
  * // Applies: { '&::before': { content: '"→"', marginRight: 5 } }
  */
-function applyBefore(css: CSS, styles: Chain | CSS): Chain {
+function applyBefore(css: CSS, styles: Chain | CSS): CSS {
   return applySelector(css, '&::before', styles);
 }
 
@@ -91,7 +93,7 @@ function applyBefore(css: CSS, styles: Chain | CSS): Chain {
  * onAfter(View().content('"←"').marginLeft(5))
  * // Applies: { '&::after': { content: '"←"', marginLeft: 5 } }
  */
-function applyAfter(css: CSS, styles: Chain | CSS): Chain {
+function applyAfter(css: CSS, styles: Chain | CSS): CSS {
   return applySelector.call(this, css, '&::after', styles);
 }
 
@@ -101,4 +103,90 @@ function applySelector(css: CSS, selector: string, styles: Chain | CSS): CSS {
   return {
     ...css,
   };
+}
+
+
+type AttrSelectorOptions = {
+  eq?: string;
+  contains?: string;
+  startsWith?: string;
+  endsWith?: string;
+  includes?: string;
+  dashMatch?: string;
+  caseSensitive?: boolean;
+};
+
+
+/**
+ * Applies an attribute selector to the given CSS object.
+ *
+ * This function creates a CSS selector based on an attribute name and optional constraints.
+ * It supports all standard CSS attribute selector syntaxes, including presence, exact match,
+ * substring match, prefix match, suffix match, word match, and hyphen-separated prefix match.
+ *
+ * @param css - The current CSS object to which the attribute selector will be added.
+ * @param attrName - The name of the attribute to select.
+ * @param options - Optional. An object specifying the type of attribute selection to perform.
+ *   - eq: Exact match (=)
+ *   - contains: Substring match (*)
+ *   - startsWith: Prefix match (^)
+ *   - endsWith: Suffix match ($)
+ *   - includes: Whitespace-separated word match (~=)
+ *   - dashMatch: Hyphen-separated prefix match (|=)
+ *   - caseSensitive: Boolean to specify case sensitivity (defaults to true)
+ *
+ * @returns A new CSS object with the applied attribute selector.
+ *
+ * @example
+ * // Simple attribute presence
+ * applyAttr({}, "title", View().fg('blue'))
+ * // Output: { '&[title]': { color: 'blue' } }
+ *
+ * @example
+ * // Exact match
+ * applyAttr({}, "href", { eq: "https://example.org" }, View().bg('red'))
+ * // Output: { '&[href="https://example.org"]': { backgroundColor: 'red' } }
+ *
+ * @example
+ * // Substring match
+ * applyAttr({}, "data-value", { contains: "example" }, View().bg('yellow'))
+ * // Output: { '&[data-value*="example"]': { backgroundColor: 'yellow' } }
+ *
+ */
+function applyAttr(css: CSS, attrName: string, optionsOrChain: AttrSelectorOptions | Chain | CSS, chainOrRawStyle?: Chain | CSS): CSS {
+  let options: AttrSelectorOptions | undefined = optionsOrChain;
+  let styles = chainOrRawStyle;
+
+  if (arguments.length === 3) {
+    options = undefined
+    styles = optionsOrChain as Chain | CSS
+  }
+
+  let selector = `&[${attrName}`;
+
+  if (options) {
+    if (options.eq !== undefined) {
+      selector += `="${options.eq}"`;
+    } else if (options.contains !== undefined) {
+      selector += `*="${options.contains}"`;
+    } else if (options.startsWith !== undefined) {
+      selector += `^="${options.startsWith}"`;
+    } else if (options.endsWith !== undefined) {
+      selector += `$="${options.endsWith}"`;
+    } else if (options.includes !== undefined) {
+      selector += `~="${options.includes}"`;
+    } else if (options.dashMatch !== undefined) {
+      selector += `|="${options.dashMatch}"`;
+    }
+
+    if (options.caseSensitive !== undefined) {
+      selector += options.caseSensitive ? ' s' : ' i';
+    }
+  }
+
+  selector += ']';
+
+  this.select(selector, styles);
+
+  return css
 }

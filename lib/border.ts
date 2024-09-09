@@ -21,8 +21,7 @@ export type Methods = {
 export function register(method: MethodRegistrar) {
   method("border", applyBorder)
   method("stroke", applyStroke)
-    method("round", applyRound)
-
+  method("round", applyRound)
 }
 
 export interface BorderOptions {
@@ -77,6 +76,7 @@ function applyRound(
   } else {
     output = applyRoundedCornerOptions(output, valueOrOptions)
   }
+
   if (options) {
     output = applyRoundedCornerOptions(output, options)
   }
@@ -96,7 +96,7 @@ export function applyBorderOptions(css: CSS, options: BorderOptions): CSS {
       isDefined(options.width) ? options.width : options,
       'Style',
       {
-        override: css.borderStyle || 'solid',
+        override: (css.borderStyle || 'solid') as string,
       }
     ),
   }
@@ -114,15 +114,14 @@ export function applyRoundedCornerOptions(
 ) {
   const result = { ...css }
   const corners = ['topLeft', 'topRight', 'bottomRight', 'bottomLeft']
-  const values = expandSidesToCorners(input)
 
-  if (typeof values === 'number' || typeof values === 'string') {
-    result.borderRadius = values
+  if (typeof input === 'number' || typeof input === 'string') {
+    result.borderRadius = input
     return result
   }
 
-  if (Array.isArray(values)) {
-    values.forEach((value, index) => {
+  if (Array.isArray(input)) {
+    input.forEach((value, index) => {
       if (value != null) {
         const corner = corners[index]
         result[generatePropertyName('border', corner, 'Radius')] = value
@@ -132,7 +131,9 @@ export function applyRoundedCornerOptions(
     return result
   }
 
-  if (typeof values === 'object') {
+  if (typeof input === 'object') {
+    const values = expandSidesToCorners(input)
+
     for (const corner of corners) {
       if (typeof values[corner] != 'undefined') {
         result[generatePropertyName('border', corner, 'Radius')] =

@@ -63,12 +63,16 @@ const Emoji = Frame().text(48).padding({ bottom: 10 }).element();
 
 const ColumnText = Frame().text(14, { align: "center" }).element();
 
-const App = () => {
+interface Props {
+  title?: string;
+}
+
+export const App = (props: Props) => {
   return (
     <FormContainer>
       <Content>
         <VerticalStack>
-          <Title>Cool Feedback Form</Title>
+          <Title>{props.title || "Cool Feedback Form"}</Title>
           <Description>
             We'd love to hear your thoughts! Please fill out the form below.
           </Description>
@@ -94,9 +98,3 @@ const App = () => {
     </FormContainer>
   );
 };
-
-const domNode = document.getElementById('root');
-// @ts-ignore
-const root = createRoot(domNode);
-
-root.render(<App />);
