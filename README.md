@@ -8,22 +8,46 @@ npm install tile-css
 
 ## Usage Examples
 
-Create a box with "Hello World" message centered;
+User card ([CodeSandbox](https://codesandbox.io/p/sandbox/ffmc6k?layout=%257B%2522sidebarPanel%2522%253A%2522EXPLORER%2522%252C%2522rootPanelGroup%2522%253A%257B%2522direction%2522%253A%2522horizontal%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522id%2522%253A%2522ROOT_LAYOUT%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522UNKNOWN%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522cm0v3lp4k00063b6l4umqvti2%2522%252C%2522sizes%2522%253A%255B100%252C0%255D%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522EDITOR%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522EDITOR%2522%252C%2522id%2522%253A%2522cm0v3lp4k00023b6lti7m5prh%2522%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522direction%2522%253A%2522horizontal%2522%252C%2522id%2522%253A%2522SHELLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522SHELLS%2522%252C%2522id%2522%253A%2522cm0v3lp4k00033b6lyy0840qq%2522%257D%255D%257D%255D%257D%252C%257B%2522type%2522%253A%2522PANEL_GROUP%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522direction%2522%253A%2522vertical%2522%252C%2522id%2522%253A%2522DEVTOOLS%2522%252C%2522panels%2522%253A%255B%257B%2522type%2522%253A%2522PANEL%2522%252C%2522contentType%2522%253A%2522DEVTOOLS%2522%252C%2522id%2522%253A%2522cm0v3lp4k00053b6lol0uceck%2522%257D%255D%257D%255D%252C%2522sizes%2522%253A%255B50%252C50%255D%257D%252C%2522tabbedPanels%2522%253A%257B%2522cm0v3lp4k00023b6lti7m5prh%2522%253A%257B%2522tabs%2522%253A%255B%257B%2522id%2522%253A%2522cm0v3lp4k00013b6l74t8wyjp%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522type%2522%253A%2522FILE%2522%252C%2522filepath%2522%253A%2522%252Fsrc%252Findex.tsx%2522%257D%255D%252C%2522id%2522%253A%2522cm0v3lp4k00023b6lti7m5prh%2522%252C%2522activeTabId%2522%253A%2522cm0v3lp4k00013b6l74t8wyjp%2522%257D%252C%2522cm0v3lp4k00053b6lol0uceck%2522%253A%257B%2522tabs%2522%253A%255B%257B%2522id%2522%253A%2522cm0v3lp4k00043b6lhj90wyrl%2522%252C%2522mode%2522%253A%2522permanent%2522%252C%2522type%2522%253A%2522UNASSIGNED_PORT%2522%252C%2522port%2522%253A0%257D%255D%252C%2522id%2522%253A%2522cm0v3lp4k00053b6lol0uceck%2522%252C%2522activeTabId%2522%253A%2522cm0v3lp4k00043b6lhj90wyrl%2522%257D%252C%2522cm0v3lp4k00033b6lyy0840qq%2522%253A%257B%2522tabs%2522%253A%255B%255D%252C%2522id%2522%253A%2522cm0v3lp4k00033b6lyy0840qq%2522%257D%257D%252C%2522showDevtools%2522%253Atrue%252C%2522showShells%2522%253Afalse%252C%2522showSidebar%2522%253Atrue%252C%2522sidebarPanelSize%2522%253A15%257D)):
 
 ```tsx
-import { Frame } from 'tile-css';
+import React from "react";
+import { HStack, VStack, View, style } from "tile-css";
 
-const TestBox = Frame("90vw", "90vh") // `Frame` centers its content by default
-  .color({ bg: "black", fg: "white" })
-  .border(10, { color: "blue", right: 0 }) // 10px border around, disabled on right side.
-  .round(5) // Round by 5px
+export function UserCard(props: {}) {
+  return (
+    <Container>
+      <ProfilePhoto src="https://cldup.com/JuBBlQRbI1.jpg" />
+      <User>
+        <h1>Azer Koçulu</h1>
+        Founder of Sway and Ray Labs.
+      </User>
+    </Container>
+  );
+}
+
+const Container = HStack() // Horizontal stack
+  .size(350)
+  .space({ gap: 20, inner: 16, outer: 24 })
+  .border(10, { color: "#eee" })
+  .round(18, { rightBottom: 0 }) // disable round for right bottom
+  .align({ y: "center" })
   .element();
 
-export const App = () => {
-  return (
-    <TestBox>Hello World</TestBox>
-  );
-};
+const ProfilePhoto = View("img")
+  .size(100, 100)
+  .round("100%")
+  .shadow()
+  .element();
+
+const User = VStack()
+  .fg("#666")
+  .sans(16, { leading: 1.25 })
+  .select(
+    "h1",
+    style().margin(0).fg("#222").text(28, { weight: 700, tracking: -2 })
+  )
+  .element();
 ```
 
 In addition to `Frame`, you can use `HStack` (orders items horizontally) and `VStack` (vertically) factory methods:
