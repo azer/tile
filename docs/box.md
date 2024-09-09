@@ -16,8 +16,7 @@ Methods for creating and manipulating layout containers. Use these functions to 
   - [opacity](#opacityvalue-number--string)
   - [zIndex](#zindexvalue-number)
   - [content](#contentvalue-string)
-- [Core Layout Function](#core-layout-function)
-  - [box](#boxoptions-boxoptions)
+- [The `box` function](#boxoptions-boxoptions)
 
 ## Factory Functions
 
@@ -153,7 +152,7 @@ Sets the content property (useful for pseudo-elements).
 
 ```typescript
 const PseudoElement = View()
-  .before(View().content('"→"'))
+  .before(View().content('→'))
   .element();
 ```
 

@@ -2,6 +2,24 @@
 
 The Accessibility module in Tile provides methods for enhancing the accessibility of your React components. Currently, it focuses on text selection control.
 
+
+```ts
+const AccessibleQuote = View('blockquote')
+  .selection({
+    bg: 'rgba(0, 123, 255, 0.2)',
+    fg: 'navy',
+    userSelect: 'text'
+  })
+  .element();
+
+export const ImportantMessage = () => (
+  <AccessibleQuote>
+    This quote is selectable with custom highlight colors. 
+    It enhances readability and indicates that the text can be copied.
+  </AccessibleQuote>
+);
+```
+
 - [Shortcut Methods](#shortcut-methods)
   - [selection](#selectionoptions-selectionoptions)
 
