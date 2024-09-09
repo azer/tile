@@ -2,7 +2,6 @@
 
 Chainable styling library for React. Built on top of [Stitches](https://stitches.dev).
 
-![UserCard jsx (2)](https://github.com/user-attachments/assets/16265758-e033-4549-81ed-6a6ead3563dc)
 
 
 ## Install
