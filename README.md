@@ -11,7 +11,7 @@ npm install tile-css
 Create a box with "Hello World" message centered;
 
 ```tsx
-import { Frame } from 'tile';
+import { Frame } from 'tile-css';
 
 const TestBox = Frame("90vw", "90vh") // `Frame` centers its content by default
   .color({ bg: "black", fg: "white" })
@@ -29,7 +29,7 @@ export const App = () => {
 In addition to `Frame`, you can use `HStack` (orders items horizontally) and `VStack` (vertically) factory methods:
 
 ```tsx
-import { Frame, style } from 'tile';
+import { Frame, style } from 'tile-css';
 
 const TestBox = Vstack("90vw", "90vh") // Vertically ordered items
   .align({ x: "center", y: "end" }) // align content to bottom center
@@ -48,17 +48,6 @@ export const App = () => {
     </TestBox>
   );
 };
-```
-
-It includes lots of shortcuts for writing simpler TypeScript, e.g;
-
-```tsx
-import { View, style } from "tile"
-
-const Container = View()
-  .center() // just center everything inside the element on both x/y axis
-  .attr("data-value", { contains: "example" }, style().bg("yellow")) // Selects all children with data-value attributes containing "example" string
-  .element()
 ```
 
 ## API
