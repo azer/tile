@@ -3,7 +3,7 @@
 Chainable styling library for React. Built on top of [Stitches](https://stitches.dev).
 
 ```bash
-npm install azer/tile
+npm install tile-css
 ```
 
 ## Usage Examples
