@@ -494,5 +494,5 @@ Methods:
 
 # Sponsor
 
-![raylabs - logo](https://github.com/user-attachments/assets/506bbf72-e1e3-4c11-8cfc-4d32695a0a48)
+[![raylabs - logo](https://github.com/user-attachments/assets/506bbf72-e1e3-4c11-8cfc-4d32695a0a48)](https://raylabs.ai)
 
