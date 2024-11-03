@@ -1,40 +1,53 @@
-import { CSS } from '@stitches/react'
-import { MethodRegistrar, Chain } from './chain'
-import { Cursor } from './cursor'
+import { CSS } from "@stitches/react";
+import { applyTextShadow, TextShadowOptions } from "./shadow";
+import { MethodRegistrar, Chain } from "./chain";
+import { Cursor } from "./cursor";
 
 export type Methods = {
-  text: (sizeOrOptions: string | number | TextOptions, options?: TextOptions) => Chain
-  sans: (sizeOrOptions: string | number | TextOptions, options?: TextOptions) => Chain
-  mono: (sizeOrOptions: string | number | TextOptions, options?: TextOptions) => Chain
-  serif: (sizeOrOptions: string | number | TextOptions, options?: TextOptions) => Chain
-  ellipsis: () => Chain
-}
+  text: (
+    sizeOrOptions: string | number | TextOptions,
+    options?: TextOptions,
+  ) => Chain;
+  sans: (
+    sizeOrOptions: string | number | TextOptions,
+    options?: TextOptions,
+  ) => Chain;
+  mono: (
+    sizeOrOptions: string | number | TextOptions,
+    options?: TextOptions,
+  ) => Chain;
+  serif: (
+    sizeOrOptions: string | number | TextOptions,
+    options?: TextOptions,
+  ) => Chain;
+  ellipsis: () => Chain;
+};
 
 export function register(method: MethodRegistrar) {
-  method("text", applyText)
-  method("sans", applySans)
-  method("mono", applyMono)
-  method("serif", applySerif)
-  method("ellipsis", applyEllipsis)
+  method("text", applyText);
+  method("sans", applySans);
+  method("mono", applyMono);
+  method("serif", applySerif);
+  method("ellipsis", applyEllipsis);
 }
 
 export interface TextOptions {
-  color?: string
-  size?: number | string
-  family?: string
-  weight?: number | string
-  tracking?: number | string
-  leading?: number | string
-  height?: number | string
-  lineHeight?: number | string
-  align?: 'left' | 'center' | 'right' | 'justify' | 'start' | 'end'
-  case?: 'upper' | 'lower' | 'capitalize' | 'normal'
-  wrap?: 'wrap' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap'
-  whiteSpace?: 'normal' | 'nowrap' | 'pre' | 'pre-line' | 'pre-wrap'
-  cursor?: Cursor
-  decoration?: 'none' | 'underline' | 'line-through' | 'overline'
-  ellipsis?: boolean
-    shadow?: TextShadow | TextShadow[]
+  color?: string;
+  size?: number | string;
+  family?: string;
+  weight?: number | string;
+  tracking?: number | string;
+  leading?: number | string;
+  height?: number | string;
+  lineHeight?: number | string;
+  align?: "left" | "center" | "right" | "justify" | "start" | "end";
+  case?: "upper" | "lower" | "capitalize" | "normal";
+  wrap?: "wrap" | "nowrap" | "pre" | "pre-line" | "pre-wrap";
+  whiteSpace?: "normal" | "nowrap" | "pre" | "pre-line" | "pre-wrap";
+  cursor?: Cursor;
+  decoration?: "none" | "underline" | "line-through" | "overline";
+  ellipsis?: boolean;
+  shadow?: TextShadowOptions | number;
 }
 
 /**
@@ -57,11 +70,15 @@ export interface TextOptions {
  * // Output:
  * { fontSize: 20, fontFamily: 'Arial', textTransform: 'uppercase' }
  */
-function applyText(css: CSS, sizeOrOptions: string | number | TextOptions, options?: TextOptions): CSS {
-  if (typeof sizeOrOptions === 'number' || typeof sizeOrOptions === 'string') {
-    return applyTextOptions(css, { size: sizeOrOptions, ...options })
+function applyText(
+  css: CSS,
+  sizeOrOptions: string | number | TextOptions,
+  options?: TextOptions,
+): CSS {
+  if (typeof sizeOrOptions === "number" || typeof sizeOrOptions === "string") {
+    return applyTextOptions(css, { size: sizeOrOptions, ...options });
   } else {
-    return applyTextOptions(css, { ...sizeOrOptions, ...options })
+    return applyTextOptions(css, { ...sizeOrOptions, ...options });
   }
 }
 
@@ -79,8 +96,12 @@ function applyText(css: CSS, sizeOrOptions: string | number | TextOptions, optio
  * // Output:
  * { fontSize: 18, fontFamily: '$sans', fontWeight: 'bold' }
  */
-function applySans(css: CSS, sizeOrOptions: string | number | TextOptions, options?: TextOptions): CSS {
-  return applyText(css, sizeOrOptions, { family: '$sans', ...options })
+function applySans(
+  css: CSS,
+  sizeOrOptions: string | number | TextOptions,
+  options?: TextOptions,
+): CSS {
+  return applyText(css, sizeOrOptions, { family: "$sans", ...options });
 }
 
 /**
@@ -97,8 +118,12 @@ function applySans(css: CSS, sizeOrOptions: string | number | TextOptions, optio
  * // Output:
  * { fontSize: 14, fontFamily: '$mono', color: 'blue' }
  */
-function applyMono(css: CSS, sizeOrOptions: string | number | TextOptions, options?: TextOptions): CSS {
-  return applyText(css, sizeOrOptions, { family: '$mono', ...options })
+function applyMono(
+  css: CSS,
+  sizeOrOptions: string | number | TextOptions,
+  options?: TextOptions,
+): CSS {
+  return applyText(css, sizeOrOptions, { family: "$mono", ...options });
 }
 
 /**
@@ -115,56 +140,58 @@ function applyMono(css: CSS, sizeOrOptions: string | number | TextOptions, optio
  * // Output:
  * { fontSize: 22, fontFamily: '$serif', fontWeight: 'normal', textAlign: 'center' }
  */
-function applySerif(css: CSS, sizeOrOptions: string | number | TextOptions, options?: TextOptions): CSS {
-  return applyText(css, sizeOrOptions, { family: '$serif', ...options })
+function applySerif(
+  css: CSS,
+  sizeOrOptions: string | number | TextOptions,
+  options?: TextOptions,
+): CSS {
+  return applyText(css, sizeOrOptions, { family: "$serif", ...options });
 }
 
 function applyTextOptions(css: CSS, options: TextOptions): CSS {
-  let output = { ...css }
+  let output = { ...css };
 
   const map: Record<string, string> = {
-    color: 'color',
-    size: 'fontSize',
-    family: 'fontFamily',
-    weight: 'fontWeight',
-    tracking: 'letterSpacing',
-    leading: 'lineHeight',
-    height: 'lineHeight',
-    wrap: 'whiteSpace',
-    whiteSpace: 'whiteSpace',
-    align: 'textAlign',
-    cursor: 'cursor',
-    decoration: 'textDecoration',
-  }
+    color: "color",
+    size: "fontSize",
+    family: "fontFamily",
+    weight: "fontWeight",
+    tracking: "letterSpacing",
+    leading: "lineHeight",
+    height: "lineHeight",
+    wrap: "whiteSpace",
+    whiteSpace: "whiteSpace",
+    align: "textAlign",
+    cursor: "cursor",
+    decoration: "textDecoration",
+  };
 
   const caseMap: Record<string, string> = {
-    upper: 'uppercase',
-    lower: 'lowercase',
-    capitalize: 'capitalize',
-    normal: 'none',
-  }
+    upper: "uppercase",
+    lower: "lowercase",
+    capitalize: "capitalize",
+    normal: "none",
+  };
 
   for (const [key, value] of Object.entries(options)) {
     if (key in map) {
-      output[map[key]] = value
-    } else if (key === 'case') {
-      output.textTransform = caseMap[value as string] || 'none'
+      output[map[key]] = value;
+    } else if (key === "case") {
+      output.textTransform = caseMap[value as string] || "none";
     } else {
-      output[key] = value
+      output[key] = value;
     }
   }
 
   if (options.ellipsis) {
-    output = applyEllipsis(output)
+    output = applyEllipsis(output);
   }
-
 
   if (options.shadow) {
-    output = applyTextShadow(output, options.shadow)
+    output = applyTextShadow(output, options.shadow);
   }
 
-
-  return output
+  return output;
 }
 
 // Add this new function
@@ -188,52 +215,9 @@ function applyTextOptions(css: CSS, options: TextOptions): CSS {
 function applyEllipsis(css: CSS): CSS {
   return {
     ...css,
-    overflowX: 'hidden',
-    overflowY: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis'
-  }
-}
-
-export interface TextShadow {
-  offsetX: string | number
-  offsetY: string | number
-  blurRadius?: string | number
-  color?: string
-}
-
-/**
- * Applies text shadow styles to the CSS object.
- *
- * @param css - The current CSS object
- * @param shadow - TextShadow object or array of TextShadow objects
- * @returns Updated CSS object with text shadow styles applied
- *
- * @example
- * // Input:
- * applyTextShadow({}, { offsetX: 1, offsetY: 1, blurRadius: 2, color: 'black' })
- * // Output:
- * { textShadow: '1px 1px 2px black' }
- *
- * @example
- * // Input:
- * applyTextShadow({}, [
- *   { offsetX: 1, offsetY: 1, color: 'black' },
- *   { offsetX: 2, offsetY: 2, blurRadius: 3, color: 'rgba(0,0,0,0.5)' }
- * ])
-
- * // Output:
- * { textShadow: '1px 1px black, 2px 2px 3px rgba(0,0,0,0.5)' }
- */
-function applyTextShadow(css: CSS, shadow: TextShadow | TextShadow[]): CSS {
-  const shadows = Array.isArray(shadow) ? shadow : [shadow]
-  const textShadows = shadows.map(s => {
-    const { offsetX, offsetY, blurRadius, color } = s
-    return `${offsetX} ${offsetY}${blurRadius ? ` ${blurRadius}` : ''}${color ? ` ${color}` : ''}`
-  })
-
-  return {
-    ...css,
-    textShadow: textShadows.join(', ')
-  }
+    overflowX: "hidden",
+    overflowY: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+  };
 }

@@ -1,20 +1,22 @@
-import { CSS } from '@stitches/react'
-import { MethodRegistrar, Chain } from './chain'
+import { CSS } from "@stitches/react";
+import { MethodRegistrar, Chain } from "./chain";
 
 export type Methods = {
-  transform: (value: string) => Chain
-  rotate: (angle: string | number) => Chain
-  scale: (x: number, y?: number) => Chain
-  translate: (x: string | number, y?: string | number) => Chain
-  skew: (x: string | number, y?: string | number) => Chain
-}
+  transform: (value: string) => Chain;
+  rotate: (angle: string | number) => Chain;
+  scale: (x: number, y?: number) => Chain;
+  translate: (x: string | number, y?: string | number) => Chain;
+  skew: (x: string | number, y?: string | number) => Chain;
+  perspective: (value: string | number) => Chain;
+};
 
 export function register(method: MethodRegistrar) {
-  method("transform", applyTransform)
-  method("rotate", applyRotate)
-  method("scale", applyScale)
-  method("translate", applyTranslate)
-  method("skew", applySkew)
+  method("transform", applyTransform);
+  method("rotate", applyRotate);
+  method("scale", applyScale);
+  method("translate", applyTranslate);
+  method("skew", applySkew);
+  method("perspective", applyPerspective);
 }
 
 /**
@@ -28,7 +30,7 @@ export function register(method: MethodRegistrar) {
  * View().transform('rotate(45deg) translateX(10px)').element()
  */
 function applyTransform(css: CSS, value: string): CSS {
-  return { ...css, transform: value }
+  return { ...css, transform: value };
 }
 
 /**
@@ -43,8 +45,11 @@ function applyTransform(css: CSS, value: string): CSS {
  * View().rotate(45).element()
  */
 function applyRotate(css: CSS, angle: string | number): CSS {
-  const value = typeof angle === 'number' ? `${angle}deg` : angle
-  return { ...css, transform: `${css.transform || ''} rotate(${value})`.trim() }
+  const value = typeof angle === "number" ? `${angle}deg` : angle;
+  return {
+    ...css,
+    transform: `${css.transform || ""} rotate(${value})`.trim(),
+  };
 }
 
 /**
@@ -60,8 +65,8 @@ function applyRotate(css: CSS, angle: string | number): CSS {
  * View().scale(2, 0.5).element()
  */
 function applyScale(css: CSS, x: number, y?: number): CSS {
-  const value = y === undefined ? `${x}` : `${x}, ${y}`
-  return { ...css, transform: `${css.transform || ''} scale(${value})`.trim() }
+  const value = y === undefined ? `${x}` : `${x}, ${y}`;
+  return { ...css, transform: `${css.transform || ""} scale(${value})`.trim() };
 }
 
 /**
@@ -77,11 +82,18 @@ function applyScale(css: CSS, x: number, y?: number): CSS {
  * View().translate('10px', '20px').element()
  * View().translate(10, 20).element()
  */
-function applyTranslate(css: CSS, x: string | number, y?: string | number): CSS {
-  const xValue = typeof x === 'number' ? `${x}px` : x
-  const yValue = y === undefined ? '' : typeof y === 'number' ? `${y}px` : y
-  const value = yValue ? `${xValue}, ${yValue}` : xValue
-  return { ...css, transform: `${css.transform || ''} translate(${value})`.trim() }
+function applyTranslate(
+  css: CSS,
+  x: string | number,
+  y?: string | number,
+): CSS {
+  const xValue = typeof x === "number" ? `${x}px` : x;
+  const yValue = y === undefined ? "" : typeof y === "number" ? `${y}px` : y;
+  const value = yValue ? `${xValue}, ${yValue}` : xValue;
+  return {
+    ...css,
+    transform: `${css.transform || ""} translate(${value})`.trim(),
+  };
 }
 
 /**
@@ -98,8 +110,27 @@ function applyTranslate(css: CSS, x: string | number, y?: string | number): CSS 
  * View().skew(10, 20).element()
  */
 function applySkew(css: CSS, x: string | number, y?: string | number): CSS {
-  const xValue = typeof x === 'number' ? `${x}deg` : x
-  const yValue = y === undefined ? '' : typeof y === 'number' ? `${y}deg` : y
-  const value = yValue ? `${xValue}, ${yValue}` : xValue
-  return { ...css, transform: `${css.transform || ''} skew(${value})`.trim() }
+  const xValue = typeof x === "number" ? `${x}deg` : x;
+  const yValue = y === undefined ? "" : typeof y === "number" ? `${y}deg` : y;
+  const value = yValue ? `${xValue}, ${yValue}` : xValue;
+  return { ...css, transform: `${css.transform || ""} skew(${value})`.trim() };
+}
+
+/**
+ * Applies perspective transform to the element.
+ *
+ * @param css - The current CSS object
+ * @param value - Perspective distance (with unit for string, or pixels for number)
+ * @returns Updated CSS object with perspective applied
+ *
+ * @example
+ * View().perspective('1000px').element()
+ * View().perspective(1000).element()
+ */
+function applyPerspective(css: CSS, value: string | number): CSS {
+  const perspectiveValue = typeof value === "number" ? `${value}px` : value;
+  return {
+    ...css,
+    transform: `${css.transform || ""} perspective(${perspectiveValue})`.trim(),
+  };
 }

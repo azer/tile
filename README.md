@@ -2,8 +2,6 @@
 
 Chainable styling library for React. Built on top of [Stitches](https://stitches.dev).
 
-
-
 ## Install
 
 ```bash
@@ -61,7 +59,7 @@ import { Frame, style } from 'tile-css';
 
 const TestBox = Vstack("90vw", "90vh") // Vertically ordered items
   .align({ x: "center", y: "end" }) // align content to bottom center
-  .scale(2.5) // Apply `scale` transform 
+  .scale(2.5) // Apply `scale` transform
   .border(10, { color: "blue" })
   .round(5) // Round by 5px
   .text(24) // font-size: 24px
@@ -507,9 +505,8 @@ Methods:
 * [translate(x: string | number, y?: string | number)](./docs/transform.md#translate-x-string-number-y-string-number-)
 * [skew(x: string | number, y?: string | number)](./docs/transform.md#skew-x-string-number-y-string-number-)
 * [transform(value: string)](./docs/transform.md#transform-value-string-)
-* 
+*
 
 # Sponsor
 
 [![raylabs - logo](https://github.com/user-attachments/assets/506bbf72-e1e3-4c11-8cfc-4d32695a0a48)](https://raylabs.ai)
-

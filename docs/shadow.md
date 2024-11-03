@@ -7,26 +7,27 @@ Methods for applying box shadow styles to React components.
 
 ## Shortcut Methods
 
-### shadow(options: ShadowOptions | number)
+### shadow(options?: ShadowOptions | number)
 
-Applies box shadow styles to an element.
+Applies box shadow styles to an element. Supports three usage patterns:
 
-Using a predefined shadow strength:
-
+Default shadow (when called with no arguments):
 ```typescript
-const LightShadowBox = View()
-  .shadow(1)
-  .size(200)
-  .bg('white')
+const DefaultShadow = View()
+  .shadow()
   .element();
 ```
 
-This creates a 200x200px white box with a light shadow (strength 1 out of 6).
+Using opacity value between 0-1:
+```typescript
+const LightShadow = View()
+  .shadow(0.5) // 50% opacity
+  .element();
+```
 
 Applying a custom shadow:
-
 ```typescript
-const CustomShadowBox = View()
+const CustomShadow = View()
   .shadow({
     x: 5,
     y: 5,
@@ -35,14 +36,23 @@ const CustomShadowBox = View()
     color: 'rgba(0, 0, 0, 0.2)',
     inset: true
   })
-  .size(200)
-  .bg('white')
   .element();
 ```
 
-This creates a 200x200px white box with a custom inset shadow, offset 5px to the right and down, with 10px blur, 2px spread, and 20% opacity black color.
+#### Default Values
+When called without arguments, applies these default values:
+```typescript
+{
+  x: 0,        // 0px horizontal offset
+  y: 4,        // 4px vertical offset
+  blur: 4,     // 4px blur radius
+  spread: 0,   // 0px spread
+  color: 'rgba(0, 0, 0, 0.25)', // 25% black
+  inset: false // outer shadow
+}
+```
 
-`ShadowOptions`:
+#### ShadowOptions
 - `x?: number | string`: Horizontal offset
 - `y?: number | string`: Vertical offset
 - `blur?: number | string`: Blur radius
@@ -50,20 +60,49 @@ This creates a 200x200px white box with a custom inset shadow, offset 5px to the
 - `color?: string`: Shadow color
 - `inset?: boolean`: Whether the shadow is inset
 
-Create a element with no shadow:
+### textShadow(options?: TextShadowOptions | number)
 
+Applies text shadow styles to an element. Supports three usage patterns:
+
+Default text shadow:
 ```typescript
-const NoShadow = View().shadow(0).element();
+const DefaultTextShadow = View()
+  .textShadow()
+  .element();
 ```
 
-Applies a medium strength shadow to the element:
-
+Using opacity value between 0-1:
 ```typescript
-const MediumShadow = View().shadow(2).element();
+const LightTextShadow = View()
+  .textShadow(0.5) // 50% opacity
+  .element();
 ```
 
-Strength can be specified up to 6:
-
+Custom text shadow:
 ```typescript
-const InnerShadow = View().shadow(6).element();
+const CustomTextShadow = View()
+  .textShadow({
+    x: 2,
+    y: 2,
+    blur: 4,
+    color: 'blue'
+  })
+  .element();
 ```
+
+#### Default Values
+When called without arguments, applies these defaults:
+```typescript
+{
+  x: 1,        // 1px horizontal offset
+  y: 1,        // 1px vertical offset
+  blur: 2,     // 2px blur radius
+  color: 'rgba(0, 0, 0, 0.25)' // 25% black
+}
+```
+
+#### TextShadowOptions
+- `x?: number | string`: Horizontal offset
+- `y?: number | string`: Vertical offset
+- `blur?: number | string`: Blur radius
+- `color?: string`: Shadow color

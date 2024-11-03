@@ -19,6 +19,20 @@ export const InfoSection = () => (
 );
 ```
 
+- [Options](#options)
+  - [align](#align)
+  - [case](#case)
+  - [color](#color)
+  - [cursor](#cursor)
+  - [decoration](#decoration)
+  - [ellipsis](#ellipsis)
+  - [family](#family)
+  - [leading](#leadinglineheightheight)
+  - [shadow](#shadow)
+  - [size](#size)
+  - [tracking](#tracking)
+  - [weight](#weight)
+  - [wrap](#wrapwhitespace)
 - [Shortcut Methods](#shortcut-methods)
   - [text](#textsizeoroptions-string--number--textoptions-options-textoptions)
   - [sans](#sanssizeoroptions-string--number--textoptions-options-textoptions)
@@ -27,6 +41,119 @@ export const InfoSection = () => (
   - [ellipsis](#ellipsis)
 - [Core Layout Function](#core-layout-function)
   - [text](#textsizeoroptions-string--number--textoptions-options-textoptions-1)
+
+## Options
+
+### align
+Text alignment within its container.
+```ts
+.text({ align: 'center' })
+.text({ align: 'justify' })
+```
+Values: `'left'` | `'center'` | `'right'` | `'justify'` | `'start'` | `'end'`
+
+### case
+Text casing transformation.
+```ts
+.text({ case: 'upper' })
+.text({ case: 'capitalize' })
+```
+Values: `'upper'` | `'lower'` | `'capitalize'` | `'normal'`
+
+### color
+Text color. Accepts any CSS color value.
+```ts
+.text({ color: 'blue' })
+.text({ color: '#FF0000' })
+.text({ color: 'rgba(0,0,0,0.5)' })
+```
+
+### cursor
+Mouse cursor style when hovering.
+```ts
+.text({ cursor: 'pointer' })
+```
+
+### decoration
+Text decoration lines.
+```ts
+.text({ decoration: 'underline' })
+.text({ decoration: 'line-through' })
+```
+Values: `'none'` | `'underline'` | `'line-through'` | `'overline'`
+
+### ellipsis
+Enable text truncation with ellipsis.
+```ts
+.text({ ellipsis: true })
+```
+
+### family
+Font family name or variable.
+```ts
+.text({ family: 'Arial' })
+.text({ family: '$sans' })  // Use system variable
+```
+
+### leading/lineHeight/height
+Line height. All three props control the same CSS property.
+```ts
+.text({ leading: 1.5 })
+.text({ lineHeight: '24px' })
+.text({ height: '2em' })
+```
+
+### shadow
+Text shadow effects. Pass a number between 0-1 to control opacity of default shadow, or customize it fully:
+
+```ts
+.text({ shadow: 0.5 })  // Default shadow at 50% opacity
+.text({ shadow: { x: 1, y: 1, blur: 2, color: 'blue' }})
+.text({ shadow: { x: 2, y: 2 }}) // Default color with custom offset
+```
+
+Default shadow:
+
+```ts
+const defaultTextShadow: TextShadowOptions = {
+  x: 1,
+  y: 1,
+  blur: 2,
+  color: "rgba(0, 0, 0, 0.25)",
+};
+```
+
+See also: [Shadows](./shadow.md).
+
+### size
+Font size. Accepts number (px) or string with units.
+```ts
+.text({ size: 16 })      // 16px
+.text({ size: '1.2rem' })
+.text({ size: '2em' })
+```
+
+### tracking
+Letter spacing. Number (px) or string with units.
+```ts
+.text({ tracking: 0.5 })    // 0.5px
+.text({ tracking: '0.1em' })
+```
+
+### weight
+Font weight. Accepts numbers (100-900) or keywords.
+```ts
+.text({ weight: 500 })
+.text({ weight: 'bold' })
+```
+
+### wrap/whiteSpace
+Text wrapping behavior. Both props control white space handling.
+```ts
+.text({ wrap: 'nowrap' })
+.text({ whiteSpace: 'pre' })
+```
+Values: `'wrap'` | `'nowrap'` | `'pre'` | `'pre-line'` | `'pre-wrap'`
 
 ## Shortcut Methods
 
@@ -135,7 +262,7 @@ The `text` function is the primary method for applying text styles.
 - `cursor?: Cursor`
 - `decoration?: 'none' | 'underline' | 'line-through' | 'overline'`
 - `ellipsis?: boolean`
-- `shadow?: TextShadow | TextShadow[]`
+- `shadow?: TextShadowOptions | number`
 
 Apply multiple text styles:
 

@@ -1,10 +1,19 @@
-import { CSS } from '@stitches/react';
-import { MethodRegistrar, Chain } from './chain';
-import { toPx } from './utils';
+import { CSS } from "@stitches/react";
+import { MethodRegistrar, Chain } from "./chain";
+import { toPx } from "./utils";
 
 export type Methods = {
-  shadow: (options: ShadowOptions | number) => Chain;
+  shadow: (options?: ShadowOptions | number) => Chain;
+  textShadow: (options?: TextShadowOptions | number) => Chain;
 };
+
+// Add interface
+export interface TextShadowOptions {
+  x?: number | string;
+  y?: number | string;
+  blur?: number | string;
+  color?: string;
+}
 
 export interface ShadowOptions {
   x?: number | string;
@@ -17,41 +26,33 @@ export interface ShadowOptions {
 
 export function register(method: MethodRegistrar) {
   method("shadow", applyShadow);
+  method("textShadow", applyTextShadow);
 }
 
 const defaultShadow: ShadowOptions = {
   x: 0,
-  y: 0,
+  y: 4,
   blur: 4,
   spread: 0,
-  color: 'rgba(0, 0, 0, 0.1)',
+  color: "rgba(0, 0, 0, 0.25)",
   inset: false,
 };
-
-// Predefined shadow strengths
-const shadowStrengths: ShadowOptions[] = [
-  { x: '0', y: '0', blur: '0', spread: '0', color: 'transparent' }, // none
-  { y: '1px', blur: '2px', color: 'rgba(0, 0, 0, 0.05)' }, // sm
-  { y: '4px', blur: '6px', spread: '-1px', color: 'rgba(0, 0, 0, 0.1)' }, // md
-  { y: '10px', blur: '15px', spread: '-3px', color: 'rgba(0, 0, 0, 0.1)' }, // lg
-  { y: '20px', blur: '25px', spread: '-5px', color: 'rgba(0, 0, 0, 0.1)' }, // xl
-  { y: '25px', blur: '50px', spread: '-12px', color: 'rgba(0, 0, 0, 0.25)' }, // 2xl
-  { inset: true, y: '2px', blur: '4px', color: 'rgba(0, 0, 0, 0.05)' }, // inner
-];
 
 /**
  * Applies shadow styles to the CSS object.
  *
  * @param css - The current CSS object
- * @param options - Shadow options or a number for predefined strength
+ * @param options - Optional shadow options or opacity between 0-1
  * @returns Updated CSS object with shadow styles applied
  *
  * @example
- * // Apply default shadow
- * applyShadow({}, 2)
+ * // Default shadow
+ * applyShadow({})
  *
- * @example
- * // Apply custom shadow
+ * // Shadow with 0.5 opacity
+ * applyShadow({}, 0.5)
+ *
+ * // Custom shadow
  * applyShadow({}, {
  *   x: '5px',
  *   y: '5px',
@@ -61,30 +62,103 @@ const shadowStrengths: ShadowOptions[] = [
  *   inset: true
  * })
  */
-function applyShadow(css: CSS, options: ShadowOptions | number): CSS {
-  if (typeof options === 'number') {
-    const index = Math.max(0, Math.min(shadowStrengths.length - 1, Math.floor(options)));
-    return applyShadowOptions(css, shadowStrengths[index]);
+function applyShadow(css: CSS, options?: ShadowOptions | number): CSS {
+  if (options === undefined) {
+    return applyShadowOptions(css, defaultShadow);
   }
+
+  if (typeof options === "number") {
+    const opacity = Math.min(1, Math.max(0, options));
+    return applyShadowOptions(css, {
+      ...defaultShadow,
+      color: `rgba(0, 0, 0, ${opacity})`,
+    });
+  }
+
   return applyShadowOptions(css, options);
 }
 
-/**
- * Applies shadow options to the CSS object.
- *
- * @param css - The current CSS object
- * @param options - Shadow options
- * @returns Updated CSS object with shadow styles applied
- */
 function applyShadowOptions(css: CSS, options: ShadowOptions): CSS {
-  const {
-    x, y, blur, spread, color, inset
-  } = { ...defaultShadow, ...options };
+  const shadowOptions = { ...defaultShadow, ...options };
+  const { x, y, blur, spread, color, inset } = shadowOptions;
 
-  const shadowValue = `${inset ? 'inset ' : ''}${toPx(x)} ${toPx(y)} ${toPx(blur)} ${toPx(spread)} ${color}`;
+  const shadowValue = `${inset ? "inset " : ""}${toPx(x)} ${toPx(y)} ${toPx(
+    blur,
+  )} ${toPx(spread)} ${color}`;
 
   return {
     ...css,
     boxShadow: shadowValue,
+  };
+}
+
+/**
+ * Default text shadow configuration.
+ */
+const defaultTextShadow: TextShadowOptions = {
+  x: 1,
+  y: 1,
+  blur: 2,
+  color: "rgba(0, 0, 0, 0.25)",
+};
+
+/**
+ * Applies text shadow styles to the CSS object.
+ *
+ * @param css - The current CSS object
+ * @param options - Optional text shadow options or opacity between 0-1
+ * @returns Updated CSS object with text shadow styles applied
+ *
+ * @example
+ * // Default text shadow
+ * applyTextShadow({})
+ *
+ * // Text shadow with 0.5 opacity
+ * applyTextShadow({}, 0.5)
+ *
+ * // Custom text shadow
+ * applyTextShadow({}, {
+ *   x: 2,
+ *   y: 2,
+ *   blur: 4,
+ *   color: 'blue'
+ * })
+ */
+export function applyTextShadow(
+  css: CSS,
+  options?: TextShadowOptions | number,
+): CSS {
+  if (options === undefined) {
+    return applyTextShadowOptions(css, defaultTextShadow);
+  }
+
+  if (typeof options === "number") {
+    const opacity = Math.min(1, Math.max(0, options));
+    return applyTextShadowOptions(css, {
+      ...defaultTextShadow,
+      color: `rgba(0, 0, 0, ${opacity})`,
+    });
+  }
+
+  return applyTextShadowOptions(css, options);
+}
+
+/**
+ * Applies text shadow options to the CSS object.
+ *
+ * @param css - The current CSS object
+ * @param options - Text shadow options
+ * @returns Updated CSS object with text shadow styles applied
+ */
+function applyTextShadowOptions(css: CSS, options: TextShadowOptions): CSS {
+  const shadowOptions = { ...defaultTextShadow, ...options };
+  const { x, y, blur, color } = shadowOptions;
+
+  const shadowValue =
+    `${toPx(x)} ${toPx(y)} ${blur ? toPx(blur) : ""} ${color}`.trim();
+
+  return {
+    ...css,
+    textShadow: shadowValue,
   };
 }
