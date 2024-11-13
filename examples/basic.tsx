@@ -1,7 +1,5 @@
-import React from 'react';
-//import { createRoot } from 'react-dom/client';
-import { init } from '../lib';
-const { Frame } = init();
+import React from "react";
+import { Frame } from "../lib";
 
 const Hello = Frame("90vw", "90vh")
   .bg("yellow")
@@ -11,9 +9,5 @@ const Hello = Frame("90vw", "90vh")
   .element();
 
 export const App = ({ message }: { message: string }) => {
-  return (
-    <Hello>
-      {message || "Hello World"}
-    </Hello>
-  );
+  return <Hello>{message || "Hello World"}</Hello>;
 };

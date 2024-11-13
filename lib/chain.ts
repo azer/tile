@@ -1,4 +1,6 @@
 import { createStitches, CSS, styled as stitchesStyled } from "@stitches/react";
+import { getDebugInfo } from "./debug";
+
 import * as box from "./box";
 import * as size from "./size";
 import * as colors from "./colors";
@@ -109,11 +111,19 @@ export function createChain(
       children[selector] = subchain;
       return chain;
     },
+    // In your element method:
     element: (rawCSS?: CSS) => {
-      return stitches.styled(elementTag || ("div" as Tag), {
+      const component = stitches.styled(elementTag || "div", {
         ...chain.compile(),
         ...rawCSS,
       });
+
+      /*const debug = getDebugInfo();
+      if (debug) {
+        component.displayName = debug.componentName;
+        }*/
+
+      return component;
     },
     variant: (
       name: string,
@@ -127,7 +137,7 @@ export function createChain(
           {
             value,
             chain: subchain,
-          }
+          },
         ];
       }
 
@@ -162,13 +172,13 @@ export function createChain(
     output.variants = {};
 
     for (const name in variants) {
-      output.variants[name] = {}
+      output.variants[name] = {};
 
       for (const variant of variants[name]) {
-				output.variants[name][variant.value] =
-					variant.chain.compile === undefined
-						? variant.chain
-						: variant.chain.compile();
+        output.variants[name][variant.value] =
+          variant.chain.compile === undefined
+            ? variant.chain
+            : variant.chain.compile();
       }
     }
 

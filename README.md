@@ -505,7 +505,7 @@ Methods:
 * [translate(x: string | number, y?: string | number)](./docs/transform.md#translate-x-string-number-y-string-number-)
 * [skew(x: string | number, y?: string | number)](./docs/transform.md#skew-x-string-number-y-string-number-)
 * [transform(value: string)](./docs/transform.md#transform-value-string-)
-*
+
 
 # Sponsor
 
