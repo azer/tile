@@ -3,6 +3,7 @@ import { Chain, MethodRegistrar } from "./chain";
 import { applyAlign, StackAlignment } from "./align";
 
 export type Methods = {
+  appear: (value: Appearance | "none") => Chain;
   box: (options: BoxOptions) => Chain;
   frame: (options: BoxOptions) => Chain;
   display: (display: string, options?: BoxOptions) => Chain;
@@ -23,6 +24,7 @@ export type Methods = {
   ) => Chain;
   relative: (options: BoxOptions) => Chain;
   opacity: (value: number | string) => Chain;
+
   zIndex: (value: number) => Chain;
 };
 
@@ -37,6 +39,7 @@ export function register(method: MethodRegistrar) {
   method("opacity", applyOpacity);
   method("zIndex", applyZIndex);
   method("content", applyContent);
+  method("appear", applyAppearance);
 }
 
 export interface BoxOptions {
@@ -74,6 +77,16 @@ export interface BoxOptions {
   opacity?: number | string;
   zIndex?: number;
   content?: (value: string) => Chain;
+}
+
+export enum Appearance {
+  None = "none",
+  Auto = "auto",
+  MenuList = "menulist",
+  TextField = "textfield",
+  Button = "button",
+  SearchField = "searchfield",
+  Textarea = "textarea",
 }
 
 /**
@@ -337,5 +350,32 @@ function applyContent(css: CSS, value: string): CSS {
   return {
     ...css,
     content: value,
+  };
+}
+
+/**
+ * Applies appearance styles to control how element is rendered by browser.
+ * Handles vendor prefixes automatically.
+ *
+ * @param css - The current CSS object
+ * @param value - Appearance value or 'none'
+ * @returns Updated CSS object with appearance styles applied
+ *
+ * @example
+ * // Reset native styling
+ * applyAppearance({}, 'none')
+ * // Output: { appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none' }
+ *
+ * @example
+ * // Use system search styling
+ * applyAppearance({}, Appearance.SearchField)
+ * // Output: { appearance: 'searchfield', WebkitAppearance: 'searchfield' ... }
+ */
+function applyAppearance(css: CSS, value: Appearance | "none"): CSS {
+  return {
+    ...css,
+    appearance: value,
+    WebkitAppearance: value,
+    MozAppearance: value,
   };
 }

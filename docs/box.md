@@ -13,7 +13,7 @@ const ResponsiveCard = View()
     flexDir: 'column',
     justify: 'center',
     items: 'center',
-  
+
   })
   .element();
 
@@ -36,6 +36,7 @@ export const Card = ({ children }) => (
   - [opacity](#opacityvalue-number--string)
   - [zIndex](#zindexvalue-number)
   - [content](#contentvalue-string)
+  - [appear](#appear)
 - [The `box` function](#boxoptions-boxoptions)
 
 ## Factory Functions
@@ -173,6 +174,20 @@ Sets the content property (useful for pseudo-elements).
 ```typescript
 const PseudoElement = View()
   .before(View().content('→'))
+  .element();
+```
+
+### appear(value: Appearance | 'none')
+
+Controls how browser renders an element's native styling.
+
+```typescript
+const ResetInput = View('input')
+  .appear('none')
+  .element();
+
+const SearchField = View('input')
+  .appear(Appearance.SearchField)
   .element();
 ```
 
