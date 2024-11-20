@@ -1,12 +1,12 @@
 import { createStitches } from "@stitches/react";
-import { Chain, createChain } from "./chain";
+import { createChain } from "./chain";
 import { BoxOptions } from "./box";
 import { breakpoints } from "./breakpoints";
 import { tokens } from "./tokens";
 import { GridOptions } from "./grid";
 import { ScrollOptions } from "./scroll";
 import { StackAlignment } from "./align";
-import { ElementTag as Tag, Tokens, StitchesConfig } from "./types";
+import { Chain, ElementTag as Tag, Tokens, StitchesConfig } from "./types";
 
 export { Cursor } from "./cursor";
 

@@ -1,6 +1,6 @@
 import { CSS } from "@stitches/react";
 
-import { MethodRegistrar, Chain } from "./chain";
+import { MethodRegistrar, Chain } from "./types";
 
 export type Methods = {
   cursor: (value: Cursor) => Chain;

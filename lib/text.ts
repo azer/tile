@@ -1,6 +1,6 @@
 import { CSS } from "@stitches/react";
 import { applyTextShadow, TextShadowOptions } from "./shadow";
-import { MethodRegistrar, Chain } from "./chain";
+import { MethodRegistrar, Chain } from "./types";
 import { Cursor } from "./cursor";
 
 export type Methods = {

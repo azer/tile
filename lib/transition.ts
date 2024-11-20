@@ -1,5 +1,5 @@
 import { CSS } from "@stitches/react";
-import { MethodRegistrar, Chain } from "./chain";
+import { MethodRegistrar, Chain } from "./types";
 
 export type Methods = {
   transition: (speed?: number | string, props?: string[]) => Chain;

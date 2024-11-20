@@ -33,8 +33,8 @@ export type Chain = BaseChain & {
 export type MethodRegistrar = (name: string, method: ChainMethod) => void;
 
 export interface VariantValue {
-  chain: Chain;
+  chain: Chain | CSS;
   value: string | number | boolean;
 }
 
-export type VariantCSS = Record<string, CSS | Array<VariantValue>>;
+export type VariantCSS = Record<string, Array<VariantValue>>;

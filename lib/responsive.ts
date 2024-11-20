@@ -1,5 +1,5 @@
 import { CSS } from "@stitches/react";
-import { MethodRegistrar, Chain } from "./chain";
+import { MethodRegistrar, Chain } from "./types";
 
 export type Methods = {
   geometry: (options: CSS, styles: Chain | CSS) => Chain;

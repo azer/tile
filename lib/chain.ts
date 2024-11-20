@@ -6,6 +6,7 @@ import {
   Chain,
   VariantCSS,
   MethodRegistrar,
+  ChainMethod,
 } from "./types";
 
 import * as box from "./box";
@@ -58,19 +59,20 @@ export function createChain(
   startingValues?: {
     tree: CSS;
     variants: VariantCSS;
-    children: Record<string, Chain>;
+    children: Record<string, CSS | Chain>;
   },
 ): Chain {
   let tree: CSS = { ...startingValues?.tree };
   const variants: VariantCSS = { ...startingValues?.variants };
-  const children: Record<string, Chain> = { ...startingValues?.children };
+  const children: Record<string, CSS | Chain> = { ...startingValues?.children };
 
   const chain: Chain = {
     extend: () => {
       return createChain(stitches, elementTag, { tree, variants, children });
     },
     compile,
-    select: (selector: string, subchain: Chain) => {
+    // @ts-ignore
+    select: (selector: string, subchain: CSS | Chain) => {
       children[selector] = subchain;
       return chain;
     },
@@ -81,17 +83,12 @@ export function createChain(
         ...rawCSS,
       });
 
-      /*const debug = getDebugInfo();
-      if (debug) {
-        component.displayName = debug.componentName;
-        }*/
-
       return component;
     },
     variant: (
       name: string,
       value: string | number | boolean,
-      subchain: Chain,
+      subchain: Chain | CSS,
     ) => {
       if (variants[name]) {
         variants[name].push({ chain: subchain, value });
@@ -139,17 +136,17 @@ export function createChain(
 
       for (const variant of variants[name]) {
         output.variants[name][variant.value] =
-          variant.chain.compile === undefined
-            ? variant.chain
-            : variant.chain.compile();
+          typeof variant.chain.compile === "function"
+            ? variant.chain.compile()
+            : variant.chain;
       }
     }
 
     for (const selector in children) {
       output[selector] =
-        children[selector].compile === undefined
-          ? children[selector]
-          : children[selector].compile();
+        typeof children[selector].compile === "function"
+          ? children[selector].compile()
+          : children[selector];
     }
 
     return output;

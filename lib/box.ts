@@ -1,6 +1,6 @@
 import { CSS } from "@stitches/react";
 
-import { Chain, MethodRegistrar } from "./chain";
+import { Chain, MethodRegistrar } from "./types";
 import { applyAlign, StackAlignment } from "./align";
 
 export type Methods = {
