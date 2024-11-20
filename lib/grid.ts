@@ -14,6 +14,7 @@ export function register(method: MethodRegistrar) {
   method("rows", applyRows);
 }
 
+// GridOptions for the public API
 export interface GridOptions {
   gap?: string | number;
   columnGap?: string | number;
@@ -65,7 +66,7 @@ export interface GridOptions {
  * // Output: { display: 'grid', gap: '10px', gridTemplateColumns: 'repeat(3, 1fr)' }
  */
 function applyGrid(css: CSS, options: GridOptions): CSS {
-  return applyGridOptions(css, { display: "grid", ...options });
+  return applyGridOptions(css, { ...options });
 }
 
 /**
@@ -87,7 +88,7 @@ function applyColumns(
 ): CSS {
   const columns =
     typeof template === "number" ? `repeat(${template}, 1fr)` : template;
-  return applyGridOptions(css, { display: "grid", columns, ...options });
+  return applyGridOptions(css, { columns, ...options });
 }
 
 /**
@@ -109,11 +110,11 @@ function applyRows(
 ): CSS {
   const rows =
     typeof template === "number" ? `repeat(${template}, 1fr)` : template;
-  return applyGridOptions(css, { display: "grid", rows, ...options });
+  return applyGridOptions(css, { rows, ...options });
 }
 
 function applyGridOptions(css: CSS, options: GridOptions): CSS {
-  let output = { ...css, display: "grid" };
+  let output = { ...css, display: "grid" } as CSS;
 
   const propertyMap: Record<string, string> = {
     gap: "gap",

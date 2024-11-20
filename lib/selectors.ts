@@ -10,7 +10,11 @@ export type Methods = {
   before: SelectorFunction;
   after: SelectorFunction;
   select: (styles: Chain | CSS, selector: string) => CSS;
-  attr: (styles: Chain | CSS, attributeName: string, options?: AttrSelectorOptions) => CSS;
+  attr: (
+    styles: Chain | CSS,
+    attributeName: string,
+    options?: AttrSelectorOptions,
+  ) => CSS;
 };
 
 export function register(method: MethodRegistrar) {
@@ -34,7 +38,7 @@ export function register(method: MethodRegistrar) {
  * // Output: { '&:hover': { backgroundColor: 'blue' } }
  */
 function applyHover(css: CSS, styles: Chain | CSS): CSS {
-  return applySelector.call(this, css, '&:hover', styles);
+  return applySelector.call(this, css, "&:hover", styles);
 }
 
 /**
@@ -49,7 +53,7 @@ function applyHover(css: CSS, styles: Chain | CSS): CSS {
  * // Output: { '&:focus': { outline: '2px solid blue' } }
  */
 function applyFocus(css: CSS, styles: Chain | CSS): CSS {
-  return applySelector.call(this, css, '&:focus', styles);
+  return applySelector.call(this, css, "&:focus", styles);
 }
 
 /**
@@ -64,7 +68,7 @@ function applyFocus(css: CSS, styles: Chain | CSS): CSS {
  * // Output: { '&:active': { transform: 'scale(0.98)' } }
  */
 function applyActive(css: CSS, styles: Chain | CSS): CSS {
-  return applySelector.call(this, css, '&:active', styles);
+  return applySelector.call(this, css, "&:active", styles);
 }
 
 /**
@@ -79,7 +83,7 @@ function applyActive(css: CSS, styles: Chain | CSS): CSS {
  * // Applies: { '&::before': { content: '"→"', marginRight: 5 } }
  */
 function applyBefore(css: CSS, styles: Chain | CSS): CSS {
-  return applySelector(css, '&::before', styles);
+  return applySelector(css, "&::before", styles);
 }
 
 /**
@@ -94,17 +98,16 @@ function applyBefore(css: CSS, styles: Chain | CSS): CSS {
  * // Applies: { '&::after': { content: '"←"', marginLeft: 5 } }
  */
 function applyAfter(css: CSS, styles: Chain | CSS): CSS {
-  return applySelector.call(this, css, '&::after', styles);
+  return applySelector.call(this, css, "&::after", styles);
 }
 
 function applySelector(css: CSS, selector: string, styles: Chain | CSS): CSS {
-  this.select(selector, styles)
+  this.select(selector, styles);
 
   return {
     ...css,
   };
 }
-
 
 type AttrSelectorOptions = {
   eq?: string;
@@ -115,7 +118,6 @@ type AttrSelectorOptions = {
   dashMatch?: string;
   caseSensitive?: boolean;
 };
-
 
 /**
  * Applies an attribute selector to the given CSS object.
@@ -153,13 +155,20 @@ type AttrSelectorOptions = {
  * // Output: { '&[data-value*="example"]': { backgroundColor: 'yellow' } }
  *
  */
-function applyAttr(css: CSS, attrName: string, optionsOrChain: AttrSelectorOptions | Chain | CSS, chainOrRawStyle?: Chain | CSS): CSS {
-  let options: AttrSelectorOptions | undefined = optionsOrChain;
+function applyAttr(
+  css: CSS,
+  attrName: string,
+  optionsOrChain: AttrSelectorOptions | Chain | CSS,
+  chainOrRawStyle?: Chain | CSS,
+): CSS {
+  let options: AttrSelectorOptions | undefined;
   let styles = chainOrRawStyle;
 
   if (arguments.length === 3) {
-    options = undefined
-    styles = optionsOrChain as Chain | CSS
+    options = undefined;
+    styles = optionsOrChain as Chain | CSS;
+  } else {
+    options = optionsOrChain as AttrSelectorOptions;
   }
 
   let selector = `&[${attrName}`;
@@ -180,13 +189,13 @@ function applyAttr(css: CSS, attrName: string, optionsOrChain: AttrSelectorOptio
     }
 
     if (options.caseSensitive !== undefined) {
-      selector += options.caseSensitive ? ' s' : ' i';
+      selector += options.caseSensitive ? " s" : " i";
     }
   }
 
-  selector += ']';
+  selector += "]";
 
   this.select(selector, styles);
 
-  return css
+  return css;
 }

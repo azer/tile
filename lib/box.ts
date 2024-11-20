@@ -1,4 +1,5 @@
 import { CSS } from "@stitches/react";
+
 import { Chain, MethodRegistrar } from "./chain";
 import { applyAlign, StackAlignment } from "./align";
 
@@ -24,7 +25,6 @@ export type Methods = {
   ) => Chain;
   relative: (options: BoxOptions) => Chain;
   opacity: (value: number | string) => Chain;
-
   zIndex: (value: number) => Chain;
 };
 
@@ -61,13 +61,14 @@ export interface BoxOptions {
   items?: "start" | "end" | "center" | "baseline" | "stretch";
   aspect?: string | number;
   display?:
-    | "block"
-    | "inline-block"
-    | "inline"
     | "flex"
     | "grid"
+    | "inline-flex"
+    | "inline-grid"
+    | "block"
+    | "inline"
     | "none"
-    | "inline-flex";
+    | string;
   align?:
     | StackAlignment
     | [StackAlignment, StackAlignment]
@@ -76,7 +77,7 @@ export interface BoxOptions {
   alignSelf?: string;
   opacity?: number | string;
   zIndex?: number;
-  content?: (value: string) => Chain;
+  content?: string;
 }
 
 export enum Appearance {
@@ -120,7 +121,7 @@ function applyFrame(input: CSS, options: BoxOptions): CSS {
  * { width: '100px', height: '100px', backgroundColor: 'red' }
  */
 export function applyBoxOptions(input: CSS, options: BoxOptions) {
-  let css = { ...input };
+  let css = { ...input } as CSS;
 
   const map = {
     justify: "justifyContent",

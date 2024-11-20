@@ -1,9 +1,12 @@
 import { createStitches } from "@stitches/react";
-import { Tokens, Chain, createChain } from "./chain";
+import { Chain, createChain } from "./chain";
 import { BoxOptions } from "./box";
 import { breakpoints } from "./breakpoints";
 import { tokens } from "./tokens";
 import { GridOptions } from "./grid";
+import { ScrollOptions } from "./scroll";
+import { StackAlignment } from "./align";
+import { ElementTag as Tag, Tokens, StitchesConfig } from "./types";
 
 export { Cursor } from "./cursor";
 
@@ -16,8 +19,8 @@ interface InitOptions {
 const defaultInstance = init();
 
 // Export the components from the default instance
-export const { View, style, Frame, ScrollView, VStack, HStack, Grid } = defaultInstance;
-
+export const { View, style, Frame, ScrollView, VStack, HStack, Grid } =
+  defaultInstance;
 
 /**
  * Initializes the styling library with custom tokens and breakpoints.
@@ -38,9 +41,9 @@ export function init(options?: InitOptions) {
       ...options?.breakpoints,
     },
     theme: options?.tokens || tokens,
-  });
+  } as StitchesConfig);
 
-  const chain = (tag?: string) => createChain(stitches, tag);
+  const chain = (tag?: Tag) => createChain(stitches, tag);
 
   return {
     /**
@@ -87,7 +90,12 @@ export function init(options?: InitOptions) {
       align?:
         | StackAlignment
         | [StackAlignment, StackAlignment]
-        | { horizontal?: StackAlignment; vertical?: StackAlignment },
+        | {
+            horizontal?: StackAlignment;
+            vertical?: StackAlignment;
+            x?: StackAlignment;
+            y?: StackAlignment;
+          },
     ): Chain => {
       let width: number | string | undefined;
       let height: number | string | undefined;
@@ -110,13 +118,23 @@ export function init(options?: InitOptions) {
       const c = chain("div")
         .vstack()
         .box({ ...boxOptions, width, height });
+
       if (!align) {
         return c.align("center");
       }
 
+      // Handle the different alignment types properly
+      if (typeof align === "string") {
+        return c.align(align);
+      }
+
+      if (Array.isArray(align)) {
+        return c.align(align);
+      }
+
       return c.align({
-        x: align?.x || "center",
-        y: align?.y || "center",
+        horizontal: align.horizontal || align.x || "center",
+        vertical: align.vertical || align.y || "center",
       });
     },
 

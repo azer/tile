@@ -15,6 +15,8 @@ export type ScrollOptions =
   | boolean;
 
 export interface CustomScrollbarOptions {
+  x?: boolean;
+  y?: boolean;
   width?: string;
   trackBg?: string;
   thumbBg?: string;
@@ -151,7 +153,10 @@ function applyCustomScrollbarOptions(
  * // Output:
  * { overflowX: 'hidden', overflowY: 'scroll' }
  */
-function applyOverflow(css: CSS, value: boolean | OverflowValue | OverflowOptions): CSS {
+function applyOverflow(
+  css: CSS,
+  value: boolean | OverflowValue | OverflowOptions,
+): CSS {
   if (typeof value === "string") {
     return { ...css, overflow: value };
   }

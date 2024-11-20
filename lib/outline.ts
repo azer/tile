@@ -1,14 +1,15 @@
 import { CSS } from "@stitches/react";
+import { Chain, MethodRegistrar } from "./chain";
 
 export type Methods = {
   outline: (
     widthOrOptions: string | number | OutlineOptions,
-    options?: OutlineOptions
-  ) => Chain
-}
+    options?: OutlineOptions,
+  ) => Chain;
+};
 
 export function register(method: MethodRegistrar) {
-  method("outline", applyOutline)
+  method("outline", applyOutline);
 }
 
 export interface OutlineOptions {
@@ -57,17 +58,17 @@ export interface OutlineOptions {
 function applyOutline(
   css: CSS,
   widthOrOptions: string | number | OutlineOptions,
-  options?: OutlineOptions
+  options?: OutlineOptions,
 ): CSS {
-  if (typeof widthOrOptions === 'object') {
-    return applyOutlineOptions(css, widthOrOptions)
+  if (typeof widthOrOptions === "object") {
+    return applyOutlineOptions(css, widthOrOptions);
   } else if (options) {
     return applyOutlineOptions(
       applyOutlineOptions(css, { width: widthOrOptions }),
-      options
-    )
+      options,
+    );
   } else {
-    return applyOutlineOptions(css, { width: widthOrOptions })
+    return applyOutlineOptions(css, { width: widthOrOptions });
   }
 }
 
@@ -79,18 +80,18 @@ function applyOutline(
  * @returns Updated CSS object with outline styles applied
  */
 function applyOutlineOptions(css: CSS, options: OutlineOptions): CSS {
-  const result = { ...css }
+  const result = { ...css };
 
   if (options.width !== undefined) {
-    result.outlineWidth = options.width
+    result.outlineWidth = options.width;
   }
   if (options.color !== undefined) {
-    result.outlineColor = options.color
+    result.outlineColor = options.color;
   }
-  result.outlineStyle = options.style || "solid"
+  result.outlineStyle = options.style || "solid";
   if (options.offset !== undefined) {
-    result.outlineOffset = options.offset
+    result.outlineOffset = options.offset;
   }
 
-  return result
+  return result;
 }

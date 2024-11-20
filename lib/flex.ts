@@ -65,7 +65,7 @@ export interface FlexOptions {
  * // Output: { display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center" }
  */
 function applyFlex(input: CSS, options: FlexOptions = {}): CSS {
-  let output = { ...input, display: "flex" };
+  let output = { ...input, display: "flex" } as CSS;
 
   if (options.direction) output.flexDirection = options.direction;
   if (options.justify) output.justifyContent = options.justify;
@@ -79,7 +79,7 @@ function applyFlex(input: CSS, options: FlexOptions = {}): CSS {
     output = applyFlexAlignOptions(output, options.align);
   }
 
-  return output
+  return output;
 }
 
 /**

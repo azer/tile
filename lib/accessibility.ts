@@ -9,14 +9,21 @@ export function register(method: MethodRegistrar) {
   method("selection", applySelection);
 }
 
-type UserSelectValue = 'none' | 'auto' | 'text' | 'all' | 'contain' | 'element' | boolean;
+type UserSelectValue =
+  | "none"
+  | "auto"
+  | "text"
+  | "all"
+  | "contain"
+  | "element"
+  | boolean;
 
 export type SelectionOptions = {
   bg?: string;
   fg?: string;
   enabled?: boolean;
   userSelect?: UserSelectValue;
-}
+};
 
 /**
  * Applies selection styles to the CSS object.
@@ -29,16 +36,19 @@ export type SelectionOptions = {
  * applySelection({}, { bg: 'blue', fg: 'white', userSelect: 'none' })
  * // Output: { "::selection": { backgroundColor: 'blue', color: 'white' }, userSelect: 'none' }
  */
-export function applySelection(css: CSS, options: SelectionOptions | false): CSS {
+export function applySelection(
+  css: CSS,
+  options: SelectionOptions | boolean,
+): CSS {
   const output = { ...css };
 
   if (options === false) {
-    output.userSelect = 'none';
+    output.userSelect = "none";
     return output;
   }
 
   if (options === true) {
-    output.userSelect = 'auto';
+    output.userselect = "auto";
     return output;
   }
 
@@ -51,13 +61,16 @@ export function applySelection(css: CSS, options: SelectionOptions | false): CSS
   }
 
   if (options.enabled !== undefined) {
-    output.userSelect = options.enabled ? 'auto' : 'none';
+    output.userSelect = options.enabled ? "auto" : "none";
   }
 
   if (options.userSelect !== undefined) {
-    output.userSelect = options.userSelect === true ? 'auto' :
-                        options.userSelect === false ? 'none' :
-                        options.userSelect;
+    output.userSelect =
+      options.userSelect === true
+        ? "auto"
+        : options.userSelect === false
+          ? "none"
+          : options.userSelect;
   }
 
   return output;

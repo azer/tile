@@ -1,5 +1,5 @@
 import { createStitches, CSS, styled as stitchesStyled } from "@stitches/react";
-import { getDebugInfo } from "./debug";
+import { ElementTag as Tag, Tokens, Node, StitchesInstance } from "./types";
 
 import * as box from "./box";
 import * as size from "./size";
@@ -22,16 +22,14 @@ import * as transform from "./transform";
 import * as accessibility from "./accessibility";
 import * as backdrop from "./backdrop";
 
-export type Tag = Parameters<typeof stitchesStyled>[0];
-export type Tokens = Parameters<typeof createStitches>[0];
-export type Node = ReturnType<typeof stitchesStyled>;
-export type StitchesInstance = ReturnType<typeof createStitches>;
-export type VariantCSS = Record<
-  string,
-  CSS | { chain: Chain; value: string | number | boolean }[]
->;
+export interface VariantValue {
+  chain: Chain;
+  value: string | number | boolean;
+}
 
-export type MethodRegistrar = (name: string, m: ChainMethod) => void;
+export type VariantCSS = Record<string, CSS | Array<VariantValue>>;
+
+export type MethodRegistrar = (name: string, method: ChainMethod) => void;
 
 export type Chain = {
   extend: () => Chain;
@@ -42,6 +40,7 @@ export type Chain = {
     value: string | number | boolean,
     subchain: Chain,
   ) => Chain;
+  css: (css: CSS) => Chain;
   element: () => Node;
 } & align.Methods &
   box.Methods &
@@ -64,6 +63,7 @@ export type Chain = {
   accessibility.Methods &
   backdrop.Methods;
 
+//export type ChainMethod = <T extends unknown[]>(input: CSS, ...args: T) => CSS;
 export type ChainMethod = (input: CSS, ...args: unknown[]) => CSS;
 
 const modules = [
@@ -153,7 +153,7 @@ export function createChain(
 
   return chain;
 
-  function addMethod(name: string, fn: MethodRegistrar) {
+  function addMethod(name: string, fn: ChainMethod) {
     chain[name] = (...args: unknown[]) => {
       update(fn.apply(chain, [tree, ...args]));
       return chain;
