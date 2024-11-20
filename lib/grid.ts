@@ -8,6 +8,10 @@ export type Methods = {
   rows: (template: string | number, options?: GridOptions) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("grid", applyGrid);
   method("columns", applyColumns);

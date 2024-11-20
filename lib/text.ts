@@ -23,6 +23,10 @@ export type Methods = {
   ellipsis: () => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("text", applyText);
   method("sans", applySans);

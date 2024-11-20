@@ -5,6 +5,10 @@ export type Methods = {
   selection: (options: SelectionOptions) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("selection", applySelection);
 }

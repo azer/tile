@@ -10,6 +10,10 @@ export type Methods = {
   landscape: (styles: Chain | CSS) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("geometry", applyGeometry);
   method("media", applyMedia);
@@ -24,9 +28,8 @@ interface MediaQueryOptions {
   maxWidth?: number | string;
   minHeight?: number | string;
   maxHeight?: number | string;
-  orientation?: 'portrait' | 'landscape';
+  orientation?: "portrait" | "landscape";
 }
-
 
 /**
  * Applies base styles and geometry to the element.
@@ -40,7 +43,11 @@ interface MediaQueryOptions {
  * applyGeometry({}, { maxWidth: 640 }, Chain().width('100%').bg('red'))
  * // Output: { '@media (max-width: 640px)': { width: '100%', backgroundColor: 'red' } }
  */
-function applyGeometry(css: CSS, options: MediaQueryOptions, styles: Chain | CSS): CSS {
+function applyGeometry(
+  css: CSS,
+  options: MediaQueryOptions,
+  styles: Chain | CSS,
+): CSS {
   const mediaQuery = convertToMediaQuery(options);
 
   if (mediaQuery) {
@@ -109,7 +116,12 @@ function applyDesktop(css: CSS, styles: Chain | CSS): CSS {
  * // Output: { '@media (orientation: portrait)': { height: '100vh' } }
  */
 function applyPortrait(css: CSS, styles: Chain | CSS): CSS {
-  return applyMediaQueryOptions.call(this, css, { orientation: 'portrait' }, styles);
+  return applyMediaQueryOptions.call(
+    this,
+    css,
+    { orientation: "portrait" },
+    styles,
+  );
 }
 
 /**
@@ -124,10 +136,19 @@ function applyPortrait(css: CSS, styles: Chain | CSS): CSS {
  * // Output: { '@media (orientation: landscape)': { width: '100vw' } }
  */
 function applyLandscape(css: CSS, styles: Chain | CSS): CSS {
-  return applyMediaQueryOptions.call(this, css, { orientation: 'landscape' }, styles);
+  return applyMediaQueryOptions.call(
+    this,
+    css,
+    { orientation: "landscape" },
+    styles,
+  );
 }
 
-function applyMediaQueryOptions(css: CSS, options: MediaQueryOptions, styles: Chain | CSS): CSS {
+function applyMediaQueryOptions(
+  css: CSS,
+  options: MediaQueryOptions,
+  styles: Chain | CSS,
+): CSS {
   const mediaQuery = convertToMediaQuery(options);
   this.select(`@media ${mediaQuery}`, styles);
   return { ...css };
@@ -136,11 +157,16 @@ function applyMediaQueryOptions(css: CSS, options: MediaQueryOptions, styles: Ch
 function convertToMediaQuery(options: MediaQueryOptions): string {
   const conditions: string[] = [];
 
-  if ('minWidth' in options) conditions.push(`(min-width: ${options.minWidth}px)`);
-  if ('maxWidth' in options) conditions.push(`(max-width: ${options.maxWidth}px)`);
-  if ('minHeight' in options) conditions.push(`(min-height: ${options.minHeight}px)`);
-  if ('maxHeight' in options) conditions.push(`(max-height: ${options.maxHeight}px)`);
-  if ('orientation' in options) conditions.push(`(orientation: ${options.orientation})`);
+  if ("minWidth" in options)
+    conditions.push(`(min-width: ${options.minWidth}px)`);
+  if ("maxWidth" in options)
+    conditions.push(`(max-width: ${options.maxWidth}px)`);
+  if ("minHeight" in options)
+    conditions.push(`(min-height: ${options.minHeight}px)`);
+  if ("maxHeight" in options)
+    conditions.push(`(max-height: ${options.maxHeight}px)`);
+  if ("orientation" in options)
+    conditions.push(`(orientation: ${options.orientation})`);
 
-  return conditions.join(' and ');
+  return conditions.join(" and ");
 }

@@ -1,27 +1,31 @@
-import { CSS } from '@stitches/react'
-import { MethodRegistrar, Chain } from './chain'
+import { CSS } from "@stitches/react";
+import { MethodRegistrar, Chain } from "./chain";
 
 export type Methods = {
-  transition: (speed?: number | string, props?: string[]) => Chain
+  transition: (speed?: number | string, props?: string[]) => Chain;
+};
+
+declare module "./types" {
+  interface ChainMethods extends Methods {}
 }
 
 export function register(method: MethodRegistrar) {
-  method("transition", applyTransition)
+  method("transition", applyTransition);
 }
 
 const defaultTransitionProps = [
-  'color',
-  'background-color',
-  'border-color',
-  'text-decoration-color',
-  'fill',
-  'stroke',
-  'opacity',
-  'box-shadow',
-  'transform',
-  'filter',
-  'backdrop-filter',
-]
+  "color",
+  "background-color",
+  "border-color",
+  "text-decoration-color",
+  "fill",
+  "stroke",
+  "opacity",
+  "box-shadow",
+  "transform",
+  "filter",
+  "backdrop-filter",
+];
 
 /**
  * Applies transition styles to the CSS object.
@@ -51,18 +55,28 @@ const defaultTransitionProps = [
  *   transitionDuration: '0.5s'
  * }
  */
-function applyTransition(css: CSS, speed?: number | string, props?: string[]): CSS {
-  return applyTransitionOptions(css, speed, props)
+function applyTransition(
+  css: CSS,
+  speed?: number | string,
+  props?: string[],
+): CSS {
+  return applyTransitionOptions(css, speed, props);
 }
 
-function applyTransitionOptions(css: CSS, speed?: number | string, props?: string[]): CSS {
-  const output = { ...css }
+function applyTransitionOptions(
+  css: CSS,
+  speed?: number | string,
+  props?: string[],
+): CSS {
+  const output = { ...css };
 
-  output.transitionProperty = (props || defaultTransitionProps).join(', ')
-  output.transitionTimingFunction = 'cubic-bezier(0.4, 0, 0.2, 1)'
-  output.transitionDuration = speed ?
-    (typeof speed === 'number' ? `${speed}ms` : speed) :
-    '150ms'
+  output.transitionProperty = (props || defaultTransitionProps).join(", ");
+  output.transitionTimingFunction = "cubic-bezier(0.4, 0, 0.2, 1)";
+  output.transitionDuration = speed
+    ? typeof speed === "number"
+      ? `${speed}ms`
+      : speed
+    : "150ms";
 
-  return output
+  return output;
 }

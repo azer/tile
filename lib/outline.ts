@@ -8,6 +8,11 @@ export type Methods = {
   ) => Chain;
 };
 
+// Add this augmentation using the existing Methods type
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("outline", applyOutline);
 }

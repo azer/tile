@@ -13,6 +13,10 @@ export type Methods = {
   ) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("size", applySize);
   method("width", applyWidth);
@@ -24,7 +28,11 @@ function applyWidth(
   width: string | number,
   options?: { max?: number | string; min?: number | string },
 ): CSS {
-  return applySizeOptions(input, { width, maxWidth: options?.max, minWidth: options?.min });
+  return applySizeOptions(input, {
+    width,
+    maxWidth: options?.max,
+    minWidth: options?.min,
+  });
 }
 
 function applyHeight(
@@ -32,7 +40,11 @@ function applyHeight(
   height: string | number,
   options?: { max?: number | string; min?: number | string },
 ): CSS {
-  return applySizeOptions(input, { height, maxHeight: options?.max, minHeight: options?.min });
+  return applySizeOptions(input, {
+    height,
+    maxHeight: options?.max,
+    minHeight: options?.min,
+  });
 }
 
 function applySize(
@@ -64,7 +76,7 @@ function applySize(
     output = applySizeOptions(output, { width: widthOrOptions });
   }
 
-  return output
+  return output;
 }
 
 export interface SizeOptions {

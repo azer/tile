@@ -1,148 +1,158 @@
-import { CSS } from '@stitches/react'
-import { MethodRegistrar, Chain } from './chain'
-import { BoxSides, BoxCorners, expandSidesToCorners, generatePropertyName, boxSideProps } from './box-sides'
-import { isDefined } from './utils'
+import { CSS } from "@stitches/react";
+import { MethodRegistrar, Chain } from "./chain";
+import {
+  BoxSides,
+  BoxCorners,
+  expandSidesToCorners,
+  generatePropertyName,
+  boxSideProps,
+} from "./box-sides";
+import { isDefined } from "./utils";
 
 export type Methods = {
   border: (
     widthOrOptions: string | number | BorderOptions,
-    options?: BorderOptions
-  ) => Chain
+    options?: BorderOptions,
+  ) => Chain;
   stroke: (
     widthOrOptions: string | number | BorderOptions,
-    options?: BorderOptions
-  ) => Chain
-   round: (
+    options?: BorderOptions,
+  ) => Chain;
+  round: (
     valueOrOptions?: number | string | BoxCorners | BoxSides,
-    options?: BoxCorners
-  ) => Chain
+    options?: BoxCorners,
+  ) => Chain;
+};
+
+declare module "./types" {
+  interface ChainMethods extends Methods {}
 }
 
 export function register(method: MethodRegistrar) {
-  method("border", applyBorder)
-  method("stroke", applyStroke)
-  method("round", applyRound)
+  method("border", applyBorder);
+  method("stroke", applyStroke);
+  method("round", applyRound);
 }
 
 export interface BorderOptions {
-  width?: number | string | BoxSides
-  style?: 'solid' | 'dashed' | 'dotted' | 'double' | 'none'
-  color?: string
-  radius?: number | string | BoxCorners | BoxSides
-  top?: number | string
-  right?: number | string
-  bottom?: number | string
-  left?: number | string
+  width?: number | string | BoxSides;
+  style?: "solid" | "dashed" | "dotted" | "double" | "none";
+  color?: string;
+  radius?: number | string | BoxCorners | BoxSides;
+  top?: number | string;
+  right?: number | string;
+  bottom?: number | string;
+  left?: number | string;
 }
 
 function applyBorder(
   input: CSS,
   widthOrOptions: string | number | BorderOptions,
-  options?: BorderOptions
+  options?: BorderOptions,
 ): CSS {
-  let output = { ...input }
-  if (typeof widthOrOptions === 'object') {
-    output = applyBorderOptions(output, widthOrOptions)
+  let output = { ...input };
+  if (typeof widthOrOptions === "object") {
+    output = applyBorderOptions(output, widthOrOptions);
   } else if (options) {
     output = applyBorderOptions(
       applyBorderOptions(output, { width: widthOrOptions }),
-      options
-    )
+      options,
+    );
   } else {
-    output = applyBorderOptions(output, { width: widthOrOptions })
+    output = applyBorderOptions(output, { width: widthOrOptions });
   }
   if (options?.radius) {
-    output = applyRoundedCornerOptions(output, options.radius)
+    output = applyRoundedCornerOptions(output, options.radius);
   }
-  return output
+  return output;
 }
 
 function applyStroke(
   input: CSS,
   widthOrOptions: string | number | BorderOptions,
-  options?: BorderOptions
+  options?: BorderOptions,
 ): CSS {
-  return applyBorder(input, widthOrOptions, options)
+  return applyBorder(input, widthOrOptions, options);
 }
 
 function applyRound(
   input: CSS,
   valueOrOptions?: number | string | BoxCorners | BoxSides,
-  options?: BoxCorners
+  options?: BoxCorners,
 ): CSS {
-  let output = { ...input }
-  if (typeof valueOrOptions === 'undefined') {
-    output = applyRoundedCornerOptions(output, '$sm')
+  let output = { ...input };
+  if (typeof valueOrOptions === "undefined") {
+    output = applyRoundedCornerOptions(output, "$sm");
   } else {
-    output = applyRoundedCornerOptions(output, valueOrOptions)
+    output = applyRoundedCornerOptions(output, valueOrOptions);
   }
 
   if (options) {
-    output = applyRoundedCornerOptions(output, options)
+    output = applyRoundedCornerOptions(output, options);
   }
-  return output
+  return output;
 }
 
 export function applyBorderOptions(css: CSS, options: BorderOptions): CSS {
   const result = {
     ...css,
     ...boxSideProps(
-      'border',
+      "border",
       isDefined(options.width) ? options.width : options,
-      'Width'
+      "Width",
     ),
     ...boxSideProps(
-      'border',
+      "border",
       isDefined(options.width) ? options.width : options,
-      'Style',
+      "Style",
       {
-        override: (css.borderStyle || 'solid') as string,
-      }
+        override: (css.borderStyle || "solid") as string,
+      },
     ),
-  }
+  };
 
   if (options.color) {
-    result.borderColor = options.color
+    result.borderColor = options.color;
   }
 
-  return result
+  return result;
 }
 
 export function applyRoundedCornerOptions(
   css: CSS,
-  input: number | string | BoxCorners | BoxSides
+  input: number | string | BoxCorners | BoxSides,
 ) {
-  const result = { ...css }
-  const corners = ['topLeft', 'topRight', 'bottomRight', 'bottomLeft']
+  const result = { ...css };
+  const corners = ["topLeft", "topRight", "bottomRight", "bottomLeft"];
 
-  if (typeof input === 'number' || typeof input === 'string') {
-    result.borderRadius = input
-    return result
+  if (typeof input === "number" || typeof input === "string") {
+    result.borderRadius = input;
+    return result;
   }
 
   if (Array.isArray(input)) {
     input.forEach((value, index) => {
       if (value != null) {
-        const corner = corners[index]
-        result[generatePropertyName('border', corner, 'Radius')] = value
+        const corner = corners[index];
+        result[generatePropertyName("border", corner, "Radius")] = value;
       }
-    })
+    });
 
-    return result
+    return result;
   }
 
-  if (typeof input === 'object') {
-    const values = expandSidesToCorners(input)
+  if (typeof input === "object") {
+    const values = expandSidesToCorners(input);
 
     for (const corner of corners) {
-      if (typeof values[corner] != 'undefined') {
-        result[generatePropertyName('border', corner, 'Radius')] =
-          values[corner]
+      if (typeof values[corner] != "undefined") {
+        result[generatePropertyName("border", corner, "Radius")] =
+          values[corner];
       }
     }
 
-    return result
+    return result;
   }
 
-  return result
+  return result;
 }

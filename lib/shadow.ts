@@ -7,6 +7,11 @@ export type Methods = {
   textShadow: (options?: TextShadowOptions | number) => Chain;
 };
 
+// Add this augmentation using the existing Methods type
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 // Add interface
 export interface TextShadowOptions {
   x?: number | string;

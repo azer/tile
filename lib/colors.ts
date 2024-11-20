@@ -10,6 +10,10 @@ export type Methods = {
   fill: (options: BGOptions) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("color", applyColor);
   method("fg", applyFg);
@@ -81,7 +85,10 @@ function applyColorOptions(css: CSS, options: ColorOptions): CSS {
   }
 
   if (options.selectionBg || options.selectionFg) {
-    output = applySelection(output, { fg: options.selectionFg, bg: options.selectionBg });
+    output = applySelection(output, {
+      fg: options.selectionFg,
+      bg: options.selectionBg,
+    });
   }
 
   if (typeof options.bg === "object") {

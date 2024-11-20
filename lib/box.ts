@@ -28,6 +28,10 @@ export type Methods = {
   zIndex: (value: number) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("box", applyBoxOptions);
   method("frame", applyFrame);

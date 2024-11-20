@@ -9,6 +9,10 @@ export type Methods = {
   center: (options?: FlexOptions) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("flex", applyFlex);
   method("hstack", applyHstack);

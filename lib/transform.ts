@@ -10,6 +10,10 @@ export type Methods = {
   perspective: (value: string | number) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("transform", applyTransform);
   method("rotate", applyRotate);

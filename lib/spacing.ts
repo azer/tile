@@ -1,23 +1,27 @@
-import { CSS } from '@stitches/react'
-import { MethodRegistrar, Chain } from './chain'
-import { boxSideProps, BoxSides } from './box-sides'
+import { CSS } from "@stitches/react";
+import { MethodRegistrar, Chain } from "./chain";
+import { boxSideProps, BoxSides } from "./box-sides";
 
 export type Methods = {
-  space: (options: SpacingOptions) => Chain
-  margin: (options: number | string | BoxSides, override?: BoxSides) => Chain
-  padding: (options: number | string | BoxSides, override?: BoxSides) => Chain
+  space: (options: SpacingOptions) => Chain;
+  margin: (options: number | string | BoxSides, override?: BoxSides) => Chain;
+  padding: (options: number | string | BoxSides, override?: BoxSides) => Chain;
+};
+
+declare module "./types" {
+  interface ChainMethods extends Methods {}
 }
 
 export function register(method: MethodRegistrar) {
-  method("space", applySpace)
-  method("margin", applyMargin)
-  method("padding", applyPadding)
+  method("space", applySpace);
+  method("margin", applyMargin);
+  method("padding", applyPadding);
 }
 
 export interface SpacingOptions {
-  gap?: string | number
-  inner?: string | number | BoxSides
-  outer?: string | number | BoxSides
+  gap?: string | number;
+  inner?: string | number | BoxSides;
+  outer?: string | number | BoxSides;
 }
 
 /**
@@ -34,7 +38,7 @@ export interface SpacingOptions {
  * { gap: 10, padding: 20, margin: 30 }
  */
 function applySpace(css: CSS, options: SpacingOptions): CSS {
-  return applySpacingOptions(css, options)
+  return applySpacingOptions(css, options);
 }
 
 /**
@@ -57,12 +61,16 @@ function applySpace(css: CSS, options: SpacingOptions): CSS {
  * // Output:
  * { marginTop: 20, marginBottom: 20, marginLeft: 20, marginRight: 15 }
  */
-function applyMargin(css: CSS, options: number | string | BoxSides, override?: BoxSides): CSS {
-  let result = applySpacingOptions(css, { outer: options })
+function applyMargin(
+  css: CSS,
+  options: number | string | BoxSides,
+  override?: BoxSides,
+): CSS {
+  let result = applySpacingOptions(css, { outer: options });
   if (override) {
-    result = applySpacingOptions(result, { outer: override })
+    result = applySpacingOptions(result, { outer: override });
   }
-  return result
+  return result;
 }
 
 /**
@@ -85,24 +93,28 @@ function applyMargin(css: CSS, options: number | string | BoxSides, override?: B
  * // Output:
  * { paddingTop: 20, paddingBottom: 20, paddingLeft: 20, paddingRight: 15 }
  */
-function applyPadding(css: CSS, options: number | string | BoxSides, override?: BoxSides): CSS {
-  let result = applySpacingOptions(css, { inner: options })
+function applyPadding(
+  css: CSS,
+  options: number | string | BoxSides,
+  override?: BoxSides,
+): CSS {
+  let result = applySpacingOptions(css, { inner: options });
   if (override) {
-    result = applySpacingOptions(result, { inner: override })
+    result = applySpacingOptions(result, { inner: override });
   }
-  return result
+  return result;
 }
 
 function applySpacingOptions(css: CSS, options: SpacingOptions): CSS {
   const result = {
     ...css,
-    ...boxSideProps('padding', options.inner),
-    ...boxSideProps('margin', options.outer),
-  }
+    ...boxSideProps("padding", options.inner),
+    ...boxSideProps("margin", options.outer),
+  };
 
   if (options.gap !== undefined) {
-    result.gap = options.gap
+    result.gap = options.gap;
   }
 
-  return result
+  return result;
 }

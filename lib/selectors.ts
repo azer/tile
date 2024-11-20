@@ -17,6 +17,10 @@ export type Methods = {
   ) => CSS;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export function register(method: MethodRegistrar) {
   method("onHover", applyHover);
   method("onFocus", applyFocus);

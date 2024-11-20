@@ -7,6 +7,10 @@ export type Methods = {
   overflow: (value: boolean | OverflowValue | OverflowOptions) => Chain;
 };
 
+declare module "./types" {
+  interface ChainMethods extends Methods {}
+}
+
 export type ScrollOptions =
   | {
       x?: boolean;
