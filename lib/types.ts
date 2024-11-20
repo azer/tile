@@ -1,5 +1,26 @@
 import { createStitches, CSS, styled as stitchesStyled } from "@stitches/react";
 
+import * as box from "./box";
+import * as size from "./size";
+import * as colors from "./colors";
+import * as align from "./align";
+import * as aspect from "./aspect";
+import * as border from "./border";
+import * as cursor from "./cursor";
+import * as outline from "./outline";
+import * as shadow from "./shadow";
+import * as spacing from "./spacing";
+import * as text from "./text";
+import * as transition from "./transition";
+import * as scroll from "./scroll";
+import * as flex from "./flex";
+import * as selectors from "./selectors";
+import * as grid from "./grid";
+import * as responsive from "./responsive";
+import * as transform from "./transform";
+import * as accessibility from "./accessibility";
+import * as backdrop from "./backdrop";
+
 export type StitchesConfig = Parameters<typeof createStitches>[0];
 export type ElementTag = Parameters<typeof stitchesStyled>[0];
 export type Tokens = Parameters<typeof createStitches>[0];
@@ -25,9 +46,28 @@ export interface BaseChain {
 export interface ChainMethods {}
 
 // Final Chain type that combines base functionality with all module methods
-export type Chain = BaseChain & {
-  [K in keyof ChainMethods]: ChainMethods[K];
-};
+export type Chain = BaseChain &
+  ChainMethods &
+  align.Methods &
+  box.Methods &
+  colors.Methods &
+  size.Methods &
+  aspect.Methods &
+  border.Methods &
+  cursor.Methods &
+  outline.Methods &
+  shadow.Methods &
+  spacing.Methods &
+  text.Methods &
+  transition.Methods &
+  scroll.Methods &
+  flex.Methods &
+  selectors.Methods &
+  responsive.Methods &
+  grid.Methods &
+  transform.Methods &
+  accessibility.Methods &
+  backdrop.Methods;
 
 // Method registration helper
 export type MethodRegistrar = (name: string, method: ChainMethod) => void;
