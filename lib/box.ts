@@ -9,21 +9,25 @@ export type Methods = {
   frame: (options: BoxOptions) => Chain;
   display: (display: string, options?: BoxOptions) => Chain;
   absolute: (
-    xOrOptions: string | number | BoxOptions,
-    y?: string | number,
+    xOrOptions?: string | number | BoxOptions,
+    yOrOptions?: string | number | BoxOptions,
     options?: BoxOptions,
   ) => Chain;
   position: (
-    x: string | number,
-    y?: string | number,
+    xOrOptions: string | number | BoxOptions,
+    yOrOptions?: string | number | BoxOptions,
     options?: BoxOptions,
   ) => Chain;
   pin: (
-    xOrOptions: string | number | BoxOptions,
-    y?: string | number,
+    xOrOptions?: string | number | BoxOptions,
+    yOrOptions?: string | number | BoxOptions,
     options?: BoxOptions,
   ) => Chain;
-  relative: (options: BoxOptions) => Chain;
+  relative: (
+    xOrOptions?: string | number | BoxOptions,
+    yOrOptions?: string | number | BoxOptions,
+    options?: BoxOptions,
+  ) => Chain;
   opacity: (value: number | string) => Chain;
   zIndex: (value: number) => Chain;
 };
@@ -210,19 +214,31 @@ function applyDisplay(
 function applyAbsolute(
   input: CSS,
   xOrOptions: string | number | BoxOptions,
-  y?: string | number,
+  yOrOptions?: string | number | BoxOptions,
   options?: BoxOptions,
 ): CSS {
+  if (arguments.length === 1) {
+    return applyBoxOptions(input, { position: "absolute" });
+  }
+
   if (typeof xOrOptions === "object") {
     return applyBoxOptions(input, { position: "absolute", ...xOrOptions });
-  } else {
+  }
+
+  if (typeof yOrOptions === "object") {
     return applyBoxOptions(input, {
       position: "absolute",
       x: xOrOptions,
-      y,
-      ...options,
+      ...yOrOptions,
     });
   }
+
+  return applyBoxOptions(input, {
+    position: "absolute",
+    x: xOrOptions,
+    y: yOrOptions,
+    ...options,
+  });
 }
 
 /**
@@ -242,11 +258,11 @@ function applyAbsolute(
  */
 function applyPosition(
   input: CSS,
-  xOrOptions: string | number,
-  y?: string | number,
+  xOrOptions: string | number | BoxOptions,
+  yOrOptions?: string | number | BoxOptions,
   options?: BoxOptions,
 ): CSS {
-  return applyAbsolute(input, xOrOptions, y, options);
+  return applyAbsolute(input, xOrOptions, yOrOptions, options);
 }
 
 /**
@@ -273,10 +289,14 @@ function applyPosition(
 function applyPin(
   input: CSS,
   xOrOptions: string | number | BoxOptions,
-  y?: string | number,
+  yOrOptions?: string | number | BoxOptions,
   options?: BoxOptions,
 ): CSS {
-  let css = applyAbsolute(input, xOrOptions, y, options);
+  if (arguments.length === 1) {
+    return applyBoxOptions(input, { position: "fixed" });
+  }
+
+  let css = applyAbsolute(input, xOrOptions, yOrOptions, options);
   return applyBoxOptions(css, { position: "fixed" });
 }
 
@@ -293,8 +313,18 @@ function applyPin(
  * // Output:
  * { position: 'relative', top: '10px', left: '20px' }
  */
-function applyRelative(input: CSS, options: BoxOptions): CSS {
-  return applyBoxOptions(input, { position: "relative", ...options });
+function applyRelative(
+  input: CSS,
+  xOrOptions: string | number | BoxOptions,
+  yOrOptions?: string | number | BoxOptions,
+  options?: BoxOptions,
+): CSS {
+  if (arguments.length === 1) {
+    return applyBoxOptions(input, { position: "relative" });
+  }
+
+  let css = applyAbsolute(input, xOrOptions, yOrOptions, options);
+  return applyBoxOptions(css, { position: "relative" });
 }
 
 /**

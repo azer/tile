@@ -3,7 +3,7 @@ import { Chain, MethodRegistrar } from "./types";
 import { applyFlexAlignOptions, StackAlignment } from "./align";
 
 export type Methods = {
-  flex: (options: FlexOptions) => Chain;
+  flex: (options?: FlexOptions) => Chain;
   hstack: (options?: FlexOptions) => Chain;
   vstack: (options?: FlexOptions) => Chain;
   center: (options?: FlexOptions) => Chain;

@@ -6,7 +6,13 @@ import { tokens } from "./tokens";
 import { GridOptions } from "./grid";
 import { ScrollOptions } from "./scroll";
 import { StackAlignment } from "./align";
-import { Chain, ElementTag as Tag, Tokens, StitchesConfig } from "./types";
+import {
+  Chain,
+  ElementTag as Tag,
+  Tokens,
+  StitchesConfig,
+  Node,
+} from "./types";
 
 export { Cursor } from "./cursor";
 
@@ -19,7 +25,7 @@ interface InitOptions {
 const defaultInstance = init();
 
 // Export the components from the default instance
-export const { View, style, Frame, ScrollView, VStack, HStack, Grid } =
+export const { View, style, Frame, ScrollView, VStack, HStack, Grid, Spacer } =
   defaultInstance;
 
 /**
@@ -250,6 +256,32 @@ export function init(options?: InitOptions) {
      */
     Grid: (options: GridOptions): Chain => {
       return chain("div").grid(options);
+    },
+
+    /**
+     * Creates a flexible spacer that expands to fill available space.
+     * Useful for creating space between elements in a layout.
+     *
+     * @returns A new Chain instance configured as a spacer
+     *
+     * @example
+     * import { HStack, Spacer } from "tile-css"
+     *
+     * const Container = HStack().element()
+     *
+     * <Container>
+     *   <span>Left</span>
+     *   <Spacer />
+     *   <span>Right</span>
+     * </Container>
+     *
+     */
+    Spacer: (): Node => {
+      return chain("div")
+        .flex({
+          grow: 1,
+        })
+        .element();
     },
   };
 }

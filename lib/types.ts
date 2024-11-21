@@ -39,7 +39,7 @@ export interface BaseChain {
     subchain: Chain,
   ) => Chain;
   css(input: CSS): Chain;
-  element: () => Node;
+  element: (css?: CSS) => Node;
 }
 
 // Empty interface that modules will augment

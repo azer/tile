@@ -1,7 +1,7 @@
 import { CSS } from "@stitches/react";
 import { MethodRegistrar, Chain } from "./types";
 
-export type SelectorFunction = (styles: Chain | CSS) => CSS;
+export type SelectorFunction = (styles: Chain | CSS) => Chain;
 
 export type Methods = {
   onHover: SelectorFunction;
@@ -11,10 +11,10 @@ export type Methods = {
   after: SelectorFunction;
   select: (styles: Chain | CSS, selector: string) => CSS;
   attr: (
-    styles: Chain | CSS,
     attributeName: string,
-    options?: AttrSelectorOptions,
-  ) => CSS;
+    optionsOrChain: AttrSelectorOptions | Chain | CSS,
+    styles?: Chain | CSS,
+  ) => Chain;
 };
 
 declare module "./types" {

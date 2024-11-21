@@ -2,7 +2,7 @@ import { CSS } from "@stitches/react";
 import { MethodRegistrar, Chain } from "./types";
 
 export type Methods = {
-  selection: (options: SelectionOptions) => Chain;
+  selection: (options: SelectionOptions | boolean) => Chain;
 };
 
 declare module "./types" {

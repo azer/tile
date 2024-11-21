@@ -3,7 +3,7 @@ import { CSS } from "@stitches/react";
 import { MethodRegistrar, Chain } from "./types";
 
 export type Methods = {
-  cursor: (value: Cursor) => Chain;
+  cursor: (value: Cursor | CursorValue) => Chain;
 };
 
 declare module "./types" {
@@ -53,8 +53,10 @@ export enum Cursor {
   ZoomOut = "zoom-out",
 }
 
+export type CursorValue = Cursor | string;
+
 export interface CursorOptions {
-  cursor?: Cursor;
+  cursor?: Cursor | CursorValue;
   src?: string;
   url?: string;
 }
@@ -84,7 +86,7 @@ export interface CursorOptions {
  * // Output:
  * { cursor: 'url(path/to/cursor.png), auto' }
  */
-function applyCursor(css: CSS, input: Cursor | CursorOptions): CSS {
+function applyCursor(css: CSS, input: CursorValue | CursorOptions): CSS {
   const options = typeof input === "string" ? { cursor: input } : input;
   return applyCursorOptions(css, options);
 }

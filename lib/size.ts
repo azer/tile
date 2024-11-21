@@ -74,6 +74,10 @@ function applySize(
     typeof widthOrOptions === "number"
   ) {
     output = applySizeOptions(output, { width: widthOrOptions });
+
+    if (arguments.length === 2) {
+      output = applySizeOptions(output, { height: widthOrOptions });
+    }
   }
 
   return output;

@@ -72,6 +72,10 @@ function applyShadow(css: CSS, options?: ShadowOptions | number): CSS {
     return applyShadowOptions(css, defaultShadow);
   }
 
+  if (options === 0) {
+    return { ...css, boxShadow: "" };
+  }
+
   if (typeof options === "number") {
     const opacity = Math.min(1, Math.max(0, options));
     return applyShadowOptions(css, {
