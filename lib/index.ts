@@ -51,6 +51,12 @@ export function init(options?: InitOptions) {
 
   const chain = (tag?: Tag) => createChain(stitches, tag);
 
+  const Spacer = chain("div")
+    .flex({
+      grow: 1,
+    })
+    .element();
+
   return {
     /**
      * Creates a new Chain instance for a div or specified element.
@@ -276,12 +282,6 @@ export function init(options?: InitOptions) {
      * </Container>
      *
      */
-    Spacer: (): Node => {
-      return chain("div")
-        .flex({
-          grow: 1,
-        })
-        .element();
-    },
+    Spacer,
   };
 }
