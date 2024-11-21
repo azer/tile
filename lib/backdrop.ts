@@ -56,6 +56,6 @@ function applyBackdrop(css: CSS, options?: BackdropOptions): CSS {
 
   return {
     ...css,
-    backdropFilter: `blur(${toPx(backdrop.blur)}) saturate(${toPx(backdrop.saturate)}) contrast(${toPx(backdrop.contrast)}%) brightness(${toPx(backdrop.brightness)})`,
+    backdropFilter: `blur(${toPx(backdrop.blur)}) saturate(${toPx(backdrop.saturate)}) contrast(${toPx(backdrop.contrast)}) brightness(${toPx(backdrop.brightness)})`,
   };
 }
