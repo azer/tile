@@ -67,13 +67,16 @@ const defaultShadow: ShadowOptions = {
  *   inset: true
  * })
  */
-function applyShadow(css: CSS, options?: ShadowOptions | number): CSS {
-  if (options === undefined) {
+function applyShadow(
+  css: CSS,
+  options?: ShadowOptions | number | boolean,
+): CSS {
+  if (options === undefined || options === true) {
     return applyShadowOptions(css, defaultShadow);
   }
 
-  if (options === 0) {
-    return { ...css, boxShadow: "" };
+  if (options === 0 || options === false) {
+    return { ...css, boxShadow: "none" };
   }
 
   if (typeof options === "number") {
