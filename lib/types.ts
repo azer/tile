@@ -36,7 +36,7 @@ export interface BaseChain {
   variant: (
     name: string,
     value: string | number | boolean,
-    subchain: Chain,
+    subchain: Chain | CSS,
   ) => Chain;
   css(input: CSS): Chain;
   element: (css?: CSS) => Node;
