@@ -3,7 +3,7 @@ import { MethodRegistrar, Chain } from "./types";
 
 export type Methods = {
   scroll: (options: ScrollOptions) => Chain;
-  customScrollbar: (options: CustomScrollbarOptions) => Chain;
+  scrollbar: (options: CustomScrollbarOptions) => Chain;
   overflow: (value: boolean | OverflowValue | OverflowOptions) => Chain;
 };
 
