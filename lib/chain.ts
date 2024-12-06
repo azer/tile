@@ -67,7 +67,7 @@ export function createChain(
   const children: Record<string, CSS | Chain> = { ...startingValues?.children };
 
   const chain: Chain = {
-    extend: (newElementTag?: string) => {
+    extend: (newElementTag?: Tag) => {
       return createChain(stitches, newElementTag || elementTag, {
         tree,
         variants,
