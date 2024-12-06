@@ -6,6 +6,7 @@ import { applyAlign, StackAlignment } from "./align";
 export type Methods = {
   appear: (value: Appearance | "none") => Chain;
   box: (options: BoxOptions) => Chain;
+  content: (value: string) => Chain;
   frame: (options: BoxOptions) => Chain;
   display: (display: string, options?: BoxOptions) => Chain;
   absolute: (

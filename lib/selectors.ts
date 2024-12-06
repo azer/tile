@@ -87,7 +87,7 @@ function applyActive(css: CSS, styles: Chain | CSS): CSS {
  * // Applies: { '&::before': { content: '"→"', marginRight: 5 } }
  */
 function applyBefore(css: CSS, styles: Chain | CSS): CSS {
-  return applySelector(css, "&::before", styles);
+  return applySelector.call(this, css, "&::before", styles);
 }
 
 /**

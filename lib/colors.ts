@@ -35,7 +35,7 @@ export interface ColorOptions {
 
 export type BGOptions =
   | {
-      color: string;
+      color?: string;
       url?: string;
       src?: string;
       base64?: string;
